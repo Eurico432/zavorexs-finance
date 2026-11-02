@@ -250,7 +250,7 @@ var NOME_PLATAFORMA = 'ZAVORExS FINANCE';
 var ADMIN_TELEFONE = '933798228';
 var SUPORTE_1 = '933798228';
 var SUPORTE_2 = '944478303';
-var SITE_URL = 'https://cool-cactus-370c80.netlify.app'; /* Link do teu Netlify */
+var SITE_URL = 'https://zavorexs-finance.pages.dev'; /* Link do teu Netlify */
 var BONUS_CONVITE_PCT = 0.05;
 
 /* Valores solicitados */
@@ -291,8 +291,8 @@ function formatKz(v){ return (Number(v)||0).toLocaleString('pt-AO',{minimumFract
 function formatUsd(v){ return '$ ' + (Number(v)||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
 function mostrarMsg(txt,tipo){ var el=document.getElementById('mensagemAuth'); if(!el)return; el.textContent=txt; el.className='msg '+tipo; el.style.display='block'; setTimeout(function(){el.style.display='none';},5000); }
 function copiar(txt){ if(navigator.clipboard){ navigator.clipboard.writeText(txt).then(function(){alert('✅ Copiado: '+txt);}).catch(function(){prompt('Copie:',txt);}); } else { prompt('Copie:',txt); } }
-function gerarCodigo(){ var c='ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; var s='ZV'; for(var i=0;i<6;i++) s+=c.charAt(Math.floor(Math.random()*c.length)); return s; }
-function gerarLink(cod){ var c='abcdefghijkmnpqrstuvwxyz23456789'; var s=''; for(var i=0;i<10;i++) s+=c.charAt(Math.floor(Math.random()*c.length)); return SITE_URL+'/?ref='+cod+'&l='+s; }
+ gerarCodigo(){ var c='ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; var s='ZV'; for(var i=0;i<6;i++) s+=c.charAt(Math.floor(Math.random()*c.length)); return s; }
+function gerarLinfunctionk(cod){ var c='abcdefghijkmnpqrstuvwxyz23456789'; var s=''; for(var i=0;i<10;i++) s+=c.charAt(Math.floor(Math.random()*c.length)); return SITE_URL+'/?ref='+cod+'&l='+s; }
 function trocarTelaAuth(t){ document.getElementById('divCadastro').classList.toggle('hidden',t!=='cadastro'); document.getElementById('divLogin').classList.toggle('hidden',t!=='login'); document.getElementById('mensagemAuth').style.display='none'; }
 function mostrarTela(id){ var ts=document.querySelectorAll('.tela'); for(var i=0;i<ts.length;i++) ts[i].classList.remove('ativa'); document.getElementById(id).classList.add('ativa'); }
 function normalizarTelefone(t){ return (t||'').replace(/\s/g,'').replace(/\+244/,'').replace(/^244/,''); }
