@@ -131,6 +131,24 @@ body.modo-usd .nav-item.active { color: #0EA5E9; }
 .tabela-linha .texto { display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 700; color: var(--texto-preto); }
 .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 3000; display: flex; align-items: center; justify-content: center; padding: 20px; }
 .modal-box { background: var(--branco); border-radius: 15px; padding: 20px; width: 100%; max-width: 400px; }
+/* Esconder a marca da Netlify */
+a[href*="netlify.com"], 
+iframe[src*="netlify"],
+div[style*="netlify"],
+[id*="netlify-badge"],
+.netlify-badge {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    height: 0 !important;
+    width: 0 !important;
+    position: absolute !important;
+    pointer-events: none !important;
+}
+
+body > div:last-child:not(.tela):not(.welcome-overlay):not(.bottom-nav) {
+    display: none !important;
+}
 </style>
 </head>
 <body class="modo-kz">
