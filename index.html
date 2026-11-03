@@ -1,0 +1,1313 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>ZAVORExS FINANCE</title>
+<style>
+:root{--bg-site:#F3F4F6;--texto-preto:#111827;--texto-mut:#6B7280;--borda-cinza:#E5E7EB;--branco:#FFFFFF;--vermelho:#EF4444;--verde:#10B981}
+body.modo-kz{--cor-primaria:#1E3A8A;--cor-secundaria:#047857;--bg-card:#FFFFFF}
+body.modo-usd{--cor-primaria:#0F172A;--cor-secundaria:#0EA5E9;--bg-card:#FFFFFF}
+*{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;-webkit-tap-highlight-color:transparent}
+body{background-color:var(--bg-site);color:var(--texto-preto);min-height:100vh;padding-bottom:70px;overflow-x:hidden}
+.tela{display:none}.tela.ativa{display:block}.hidden{display:none!important}
+a{color:inherit;text-decoration:none}
+.auth-container{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;background:var(--bg-site)}
+.form-box{background:var(--branco);padding:30px 20px;border-radius:16px;width:100%;max-width:400px;border:1px solid var(--borda-cinza);box-shadow:0 4px 20px rgba(0,0,0,.05)}
+.form-logo{text-align:center;margin-bottom:25px}
+.form-logo h1{font-size:24px;font-weight:900;color:var(--texto-preto);letter-spacing:1px}
+.form-logo span{color:#3B82F6}
+.form-box h2{text-align:center;margin-bottom:20px;font-size:18px;font-weight:700;color:var(--texto-preto)}
+.form-group{margin-bottom:15px}
+.form-group label{display:block;font-size:11px;color:var(--texto-preto);margin-bottom:5px;font-weight:700;text-transform:uppercase}
+.form-group input,.form-group select{width:100%;padding:14px;border:1px solid var(--borda-cinza);border-radius:10px;background:var(--branco);color:var(--texto-preto);font-size:14px;outline:none}
+.form-group input:focus{border-color:#3B82F6}
+.btn-primario{width:100%;padding:15px;background:#1E3A8A;color:#FFF;border:none;border-radius:10px;font-size:15px;font-weight:900;cursor:pointer;margin-top:10px}
+.btn-primario:disabled{opacity:.5;cursor:not-allowed}
+.link-troca{text-align:center;margin-top:20px;font-size:12px;color:var(--texto-mut)}
+.link-troca a{color:#3B82F6;font-weight:800;cursor:pointer}
+.msg{display:none;padding:10px;margin-bottom:15px;border-radius:8px;font-size:12px;text-align:center}
+.msg.error{background:#FEE2E2;color:#B91C1C;border:1px solid #FECACA}
+.msg.success{background:#D1FAE5;color:#047857;border:1px solid #A7F3D0}
+.btn-whats{background:var(--verde);color:#fff;border:none;padding:12px;border-radius:10px;font-size:13px;font-weight:800;width:100%;margin-top:15px;cursor:pointer}
+.btn-suporte{background:transparent;color:var(--texto-preto);border:1px solid var(--borda-cinza);padding:12px;border-radius:10px;font-size:13px;font-weight:800;width:100%;margin-top:10px;cursor:pointer}
+header{background:var(--branco);padding:15px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;border-bottom:1px solid var(--borda-cinza)}
+header .brand-logo{width:36px;height:36px;border-radius:50%;background:#1E3A8A;color:#FFF;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:18px}
+header .brand-name h1{font-size:14px;font-weight:900;color:var(--texto-preto)}
+header .brand-name h1 span{color:#3B82F6}
+header .brand-name p{font-size:8px;color:var(--texto-mut);text-transform:uppercase}
+header .top-btn{background:var(--bg-site);border:none;border-radius:50%;width:34px;height:34px;font-size:15px;color:var(--texto-preto);position:relative;cursor:pointer}
+header .top-btn .badge{position:absolute;top:-2px;right:-2px;background:var(--vermelho);color:#fff;font-size:8px;font-weight:900;width:14px;height:14px;border-radius:50%}
+.brand{display:flex;align-items:center;gap:10px}
+.top-actions{display:flex;gap:8px}
+.moeda-selector{display:flex;gap:10px;margin:15px;justify-content:center}
+.moeda-btn{flex:1;padding:12px;border-radius:10px;border:1px solid var(--borda-cinza);background:var(--branco);color:var(--texto-mut);font-weight:800;font-size:13px;cursor:pointer}
+.moeda-btn.active{background:#1E3A8A;color:#FFF;border-color:#1E3A8A}
+body.modo-usd .moeda-btn.active{background:#0EA5E9;border-color:#0EA5E9}
+.saldo-card{background:var(--branco);border:1px solid var(--borda-cinza);border-radius:16px;padding:18px;margin:15px;box-shadow:0 2px 10px rgba(0,0,0,.02)}
+.saldo-card h3{font-size:12px;color:var(--texto-mut);font-weight:600;text-transform:uppercase}
+.saldo-card .valor{font-size:32px;font-weight:900;margin:5px 0 15px;color:var(--texto-preto)}
+.saldo-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.saldo-box{background:var(--bg-site);border:1px solid var(--borda-cinza);border-radius:10px;padding:10px;display:flex;align-items:center;gap:8px}
+.saldo-box .ico{font-size:18px}
+.saldo-box .info p{font-size:9px;color:var(--texto-mut);text-transform:uppercase}
+.saldo-box .info h4{font-size:14px;font-weight:900;color:var(--texto-preto)}
+.saldo-box .info h4.verde{color:#047857}
+.saldo-box .info h4.dourado{color:#D4AF37}
+.secao-titulo{display:flex;justify-content:space-between;align-items:center;margin:15px 15px 10px;padding-bottom:8px;border-bottom:1px solid var(--borda-cinza)}
+.secao-titulo h3{font-size:14px;font-weight:800;color:var(--texto-preto)}
+.secao-titulo a{font-size:11px;color:#3B82F6;font-weight:700;cursor:pointer}
+.grid-acoes{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 15px 15px}
+.grid-btn{background:var(--branco);border:1px solid var(--borda-cinza);border-radius:12px;padding:12px;display:flex;align-items:center;gap:8px;cursor:pointer}
+.grid-btn .ico{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;background:var(--bg-site)}
+.grid-btn .info h4{font-size:11px;font-weight:800;color:var(--texto-preto)}
+.grid-btn .info p{font-size:8px;color:var(--texto-mut)}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--branco);border-top:1px solid var(--borda-cinza);display:flex;justify-content:space-around;padding:8px 0;z-index:100}
+.nav-item{text-align:center;font-size:8px;color:var(--texto-mut);flex:1;font-weight:700;cursor:pointer}
+.nav-item .ico{font-size:18px;display:block;margin-bottom:2px}
+.nav-item.active{color:#1E3A8A}
+body.modo-usd .nav-item.active{color:#0EA5E9}
+.admin-layout{display:flex;flex-direction:column;min-height:100vh;background:var(--bg-site);position:fixed;top:0;left:0;width:100%;height:100%;overflow-y:auto;z-index:2000}
+.sidebar{width:100%;background:var(--branco);border-bottom:1px solid var(--borda-cinza);display:flex;padding:10px;overflow-x:auto;gap:10px;position:sticky;top:0;z-index:10}
+.sidebar-item{width:60px;height:50px;border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--texto-mut);font-size:8px;font-weight:700;flex-shrink:0;cursor:pointer;gap:2px}
+.sidebar-item .ico{font-size:16px}
+.sidebar-item.active{background:var(--bg-site);color:#1E3A8A}
+.admin-content{flex:1;padding:15px;padding-bottom:80px}
+.admin-header{background:var(--branco);border:1px solid var(--borda-cinza);border-radius:12px;padding:12px;display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}
+.admin-header .info h2{font-size:13px;font-weight:900;color:var(--texto-preto)}
+.admin-header .info h2 span{color:#3B82F6}
+.admin-header .user .avatar{width:30px;height:30px;border-radius:50%;background:var(--bg-site);display:flex;align-items:center;justify-content:center;font-weight:900;color:#1E3A8A;font-size:12px}
+.admin-section-title{font-size:11px;color:#1E3A8A;font-weight:900;text-transform:uppercase;margin:20px 0 10px;border-bottom:1px solid var(--borda-cinza);padding-bottom:5px}
+.admin-input-group{margin-bottom:10px}
+.admin-input-group label{display:block;font-size:10px;color:var(--texto-preto);margin-bottom:4px;font-weight:700}
+.admin-input-group input,.admin-input-group select{width:100%;padding:10px;border:1px solid var(--borda-cinza);border-radius:8px;background:var(--branco);font-size:12px}
+.admin-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:15px}
+.admin-btn{background:var(--branco);border:1px solid var(--borda-cinza);border-radius:10px;padding:12px;display:flex;align-items:center;gap:8px;cursor:pointer}
+.admin-btn .ico{font-size:20px}
+.admin-btn .info h4{font-size:11px;font-weight:800;color:var(--texto-preto)}
+.admin-btn .info p{font-size:8px;color:var(--texto-mut)}
+.plano-card{background:var(--branco);border-radius:12px;padding:15px;margin-bottom:10px;border:1px solid var(--borda-cinza)}
+.plano-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.plano-nome{font-size:14px;font-weight:800;color:var(--texto-preto)}
+.plano-valor{font-size:13px;font-weight:800;color:#1E3A8A}
+.plano-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;text-align:center;background:var(--bg-site);padding:8px;border-radius:8px;margin-bottom:10px}
+.plano-stat .lbl{font-size:8px;color:var(--texto-mut)}
+.plano-stat .val{font-size:11px;font-weight:800;color:var(--texto-preto)}
+.plano-stat .val.verde{color:#047857}
+.plano-btn{width:100%;padding:10px;border-radius:8px;background:#1E3A8A;color:#FFF;border:none;font-weight:800;font-size:12px;cursor:pointer}
+.plano-btn:disabled{background:var(--borda-cinza);color:#9CA3AF;cursor:not-allowed}
+.card-mini{background:var(--branco);border-radius:12px;padding:15px;margin-bottom:10px;border:1px solid var(--borda-cinza)}
+.card-mini .nome{font-size:13px;font-weight:800;color:#1E3A8A;margin-bottom:4px}
+.card-mini .info{font-size:10px;color:var(--texto-mut);margin-bottom:2px}
+.card-mini .info b{color:var(--texto-preto)}
+.card-mini .acoes{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
+.card-mini .acoes button{flex:1;padding:8px;border:none;border-radius:6px;font-weight:800;font-size:9px;cursor:pointer;min-width:70px}
+.btn-aprovar{background:var(--verde);color:#fff}
+.btn-rejeitar{background:var(--vermelho);color:#fff}
+.btn-cinza{background:var(--bg-site);color:var(--texto-preto);border:1px solid var(--borda-cinza)!important}
+.btn-azul{background:#3B82F6;color:#fff}
+.tabela-opcoes{display:flex;flex-direction:column;gap:8px;margin:0 15px 15px}
+.tabela-linha{background:var(--branco);border:1px solid var(--borda-cinza);border-radius:10px;padding:12px;display:flex;align-items:center;justify-content:space-between;cursor:pointer}
+.tabela-linha .texto{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:700;color:var(--texto-preto)}
+.modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.5);z-index:3000;display:flex;align-items:center;justify-content:center;padding:20px}
+.modal-box{background:var(--branco);border-radius:15px;padding:20px;width:100%;max-width:400px;max-height:85vh;overflow-y:auto}
+.modal-box h3{font-size:15px;font-weight:900;margin-bottom:15px;color:#1E3A8A}
+.conta-vinculada{display:flex;justify-content:space-between;align-items:center;padding:10px;background:var(--branco);border:1px solid var(--borda-cinza);border-radius:8px;margin-bottom:6px}
+.conta-vinculada h4{font-size:11px;font-weight:800;color:var(--texto-preto)}
+.conta-vinculada p{font-size:9px;color:var(--texto-mut)}
+.welcome-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:var(--branco);z-index:9999;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center}
+a[href*="netlify.com"],iframe[src*="netlify"],div[style*="netlify"],[id*="netlify-badge"],.netlify-badge{display:none!important;visibility:hidden!important;opacity:0!important;height:0!important;width:0!important;position:absolute!important;pointer-events:none!important}
+</style>
+</head><body class="modo-kz"><div id="telaLoading" class="tela ativa">
+  <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;background:var(--bg-site)">
+    <h1 style="font-size:24px;color:#1E3A8A;font-weight:900;">ZAVORExS FINANCE</h1>
+    <p style="color:#6B7280;font-size:11px;margin-top:5px;">A carregar...</p>
+  </div>
+</div>
+
+<div id="welcomeOverlay" class="welcome-overlay hidden">
+  <h1 style="font-size:20px;color:#1E3A8A;font-weight:900;margin-bottom:10px;">ZAVORExS FINANCE</h1>
+  <h2 style="font-size:14px;color:#111827;margin-bottom:5px;">Bem-vindo de volta,</h2>
+  <div class="nome" id="welcomeNome" style="color:#1E3A8A;font-size:18px;font-weight:900;">...</div>
+  <p style="margin-top:15px;font-size:11px;color:#6B7280">Gerindo o seu futuro.</p>
+</div>
+
+<div id="telaAuth" class="tela">
+  <div class="auth-container">
+    <div class="form-box">
+      <div class="form-logo"><h1>ZAVORExS <span>FINANCE</span></h1></div>
+      <div id="mensagemAuth" class="msg"></div>
+      <div id="divLogin">
+        <h2>Entrar na conta</h2>
+        <form id="formLogin" autocomplete="off">
+          <div class="form-group"><label>Número de Telefone</label><input type="tel" id="l_tel" placeholder="9XX XXX XXX" inputmode="numeric"></div>
+          <div class="form-group"><label>Senha</label><input type="password" id="l_pass" placeholder="Senha de 6 dígitos" maxlength="6" inputmode="numeric"></div>
+          <button type="submit" class="btn-primario" id="btnLogin">ENTRAR</button>
+        </form>
+        <div class="link-troca">Não tem uma conta? <a onclick="trocarTelaAuth('cadastro')">Registar agora</a></div>
+      </div>
+      <div id="divCadastro" class="hidden">
+        <h2>Criar Conta</h2>
+        <form id="formCadastro" autocomplete="off">
+          <div class="form-group"><label>Nome Completo</label><input type="text" id="r_name" placeholder="Seu nome completo"></div>
+          <div class="form-group"><label>Número de Telefone</label><input type="tel" id="r_tel" placeholder="9XX XXX XXX" inputmode="numeric"></div>
+          <div class="form-group"><label>Senha (6 dígitos)</label><input type="password" id="r_pass" placeholder="Crie uma senha" maxlength="6" inputmode="numeric"></div>
+          <div class="form-group"><label>Confirmar Senha</label><input type="password" id="r_pass2" placeholder="Repita a senha" maxlength="6" inputmode="numeric"></div>
+          <div class="form-group"><label>Código de Convite (Opcional)</label><input type="text" id="r_code" placeholder="Código de quem te convidou"></div>
+          <button type="submit" class="btn-primario" id="btnCadastro">CRIAR CONTA</button>
+        </form>
+        <div class="link-troca">Já tem conta? <a onclick="trocarTelaAuth('login')">Entrar</a></div>
+      </div>
+      <button class="btn-whats" onclick="abrirGrupoAuth()">💬 ENTRAR NO GRUPO WHATSAPP</button>
+      <button class="btn-suporte" onclick="abrirSuporteAuth()">🎧 FALAR COM SUPORTE</button>
+    </div>
+  </div>
+</div>
+
+<div id="telaApp" class="tela">
+  <header>
+    <div class="brand">
+      <div class="brand-logo" id="headerLogo">Z</div>
+      <div class="brand-name"><h1>ZAVORExS <span>FINANCE</span></h1></div>
+    </div>
+    <div class="top-actions">
+      <button class="top-btn" onclick="mudarTab('perfil')">👤</button>
+      <button class="top-btn" onclick="mostrarNotificacoes()">🔔</button>
+    </div>
+  </header>
+  <div id="conteudoApp"></div>
+  <div class="bottom-nav">
+    <div class="nav-item active" data-tab="inicio" onclick="mudarTab('inicio')"><span class="ico">🏠</span>Início</div>
+    <div class="nav-item" data-tab="investir" onclick="mudarTab('investir')"><span class="ico">📈</span>Investir</div>
+    <div class="nav-item" data-tab="depositar" onclick="mudarTab('depositar')"><span class="ico">💰</span>Depósito</div>
+    <div class="nav-item" data-tab="equipa" onclick="mudarTab('equipa')"><span class="ico">👥</span>Equipa</div>
+    <div class="nav-item" data-tab="perfil" onclick="mudarTab('perfil')"><span class="ico">👤</span>Perfil</div>
+  </div>
+</div>
+
+<div id="telaAdmin" class="tela">
+  <div class="admin-layout">
+    <div class="sidebar">
+      <div class="sidebar-menu" style="display:flex;width:100%;justify-content:center;gap:8px;">
+        <div class="sidebar-item active" onclick="mudarTabAdmin('dashboard')"><span class="ico">🏠</span>Início</div>
+        <div class="sidebar-item" onclick="mudarTabAdmin('usuarios')"><span class="ico">👥</span>Users</div>
+        <div class="sidebar-item" onclick="mudarTabAdmin('financeiro')"><span class="ico">💳</span>Finanças</div>
+        <div class="sidebar-item" onclick="mudarTabAdmin('saques')"><span class="ico">💸</span>Saques</div>
+        <div class="sidebar-item" onclick="mudarTabAdmin('config')"><span class="ico">⚙️</span>Config</div>
+        <div class="sidebar-item" onclick="sair()"><span class="ico">🚪</span>Sair</div>
+      </div>
+    </div>
+    <div class="admin-content">
+      <div class="admin-header">
+        <div class="info"><h2>PAINEL <span>ADMIN</span></h2></div>
+        <div class="user"><div class="avatar" id="adminAvatar">A</div></div>
+      </div>
+      <div id="conteudoAdmin"></div>
+    </div>
+  </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script><script>
+/* ===== CONFIGURAÇÕES ===== */
+var NOME_PLATAFORMA = 'ZAVORExS FINANCE';
+var ADMIN_TELEFONE = '933798228';
+var SUPORTE_1 = '933798228';
+var SUPORTE_2 = '944478303';
+var SITE_URL = 'https://zavorexs-finance.pages.dev';
+var BONUS_CONVITE_PCT = 0.05;
+
+var TAXA_SAQUE = 0.04;
+var MIN_SAQUE_KZ = 1500;
+var MIN_DEPOSITO_KZ = 15000;
+var MIN_SAQUE_USD = 3;
+var MIN_DEPOSITO_USD = 16;
+var TAXA_CAMBIO_USD = 900;
+
+var DADOS_DEPOSITO_KZ = {
+  iban1: '0040 0000 07106886101 27', iban2: '005500004565120910147', titular: 'Eurico Casssoma Novais',
+  unitelEntidade: '00930', unitelRef: '933798228', paypayEntidade: '10116', paypayRef: '933798228', kwanzaEntidade: '00525', kwanzaRef: '933798228'
+};
+var DADOS_DEPOSITO_USD = {
+  iban1: '005500004565120910147', iban2: '', titular: 'Eurico Casssoma Novais',
+  unitelEntidade: '00930', unitelRef: '933798228', paypayEntidade: '10116', paypayRef: '933798228', kwanzaEntidade: '00525', kwanzaRef: '933798228'
+};
+
+var LINKS_WHATSAPP = { grupo: 'https://chat.whatsapp.com/JZHgJPbnogHAi7E9Rnfp9g?s=cl&p=a&iam=2' };
+var usuarioAtual = null;
+var usuarios = [], depositos = [], saques = [], configGlobal = {}, moedaAtual = 'KZ';
+
+/* ===== FIREBASE ===== */
+var firebaseConfig = {
+  apiKey: "AIzaSyAxT8jstB1Ot7ncE2IUDYVZZpPDxyevTeU",
+  authDomain: "zavoryx-finance.firebaseapp.com",
+  projectId: "zavoryx-finance",
+  storageBucket: "zavoryx-finance.firebasestorage.app",
+  messagingSenderId: "333278386958",
+  appId: "1:333278386958:web:0348436a8c51d4eeb1d55f"
+};
+firebase.initializeApp(firebaseConfig);
+var auth = firebase.auth();
+var db = firebase.firestore();
+
+/* ===== UTILIDADES ===== */
+function formatKz(v){ return (Number(v)||0).toLocaleString('pt-AO',{minimumFractionDigits:2,maximumFractionDigits:2})+' Kz'; }
+function formatUsd(v){ return '$ ' + (Number(v)||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+function mostrarMsg(txt,tipo){ var el=document.getElementById('mensagemAuth'); if(!el)return; el.textContent=txt; el.className='msg '+tipo; el.style.display='block'; setTimeout(function(){el.style.display='none';},5000); }
+function copiar(txt){ if(navigator.clipboard){ navigator.clipboard.writeText(txt).then(function(){alert('✅ Copiado: '+txt);}).catch(function(){prompt('Copie:',txt);}); } else { prompt('Copie:',txt); } }
+function gerarCodigo(){ var c='ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; var s='ZV'; for(var i=0;i<6;i++) s+=c.charAt(Math.floor(Math.random()*c.length)); return s; }
+function gerarLink(cod){ var c='abcdefghijkmnpqrstuvwxyz23456789'; var s=''; for(var i=0;i<10;i++) s+=c.charAt(Math.floor(Math.random()*c.length)); return SITE_URL+'/?ref='+cod+'&l='+s; }
+function trocarTelaAuth(t){ document.getElementById('divCadastro').classList.toggle('hidden',t!=='cadastro'); document.getElementById('divLogin').classList.toggle('hidden',t!=='login'); document.getElementById('mensagemAuth').style.display='none'; }
+function mostrarTela(id){ var ts=document.querySelectorAll('.tela'); for(var i=0;i<ts.length;i++) ts[i].classList.remove('ativa'); document.getElementById(id).classList.add('ativa'); }
+function normalizarTelefone(t){ return (t||'').replace(/\s/g,'').replace(/\+244/,'').replace(/^244/,''); }
+function abrirSuporte(){ window.open('https://wa.me/244'+SUPORTE_1,'_blank'); }
+function abrirSuporteAuth(){ abrirSuporte(); }
+function abrirGrupoWA(){ window.open(LINKS_WHATSAPP.grupo,'_blank'); }
+function abrirGrupoAuth(){ abrirGrupoWA(); }
+function mostrarNotificacoes(){ alert('🔔 Notificações\n\nConsulte o seu histórico de transações.'); }/* ===== 50 PLANOS KZ ===== */
+var PLANOS_KZ = [
+{nome:'Bronze',valor:15000,diario:300},{nome:'Bronze Plus',valor:24000,diario:480},{nome:'Bronze Pro',valor:33500,diario:670},
+{nome:'Prata',valor:44000,diario:880},{nome:'Prata Plus',valor:55500,diario:1110},{nome:'Prata Pro',valor:68000,diario:1360},
+{nome:'Ouro',valor:81500,diario:1630},{nome:'Ouro Plus',valor:96000,diario:1920},{nome:'Ouro Pro',valor:111500,diario:2230},
+{nome:'Platina',valor:128000,diario:2560},{nome:'Platina Plus',valor:145500,diario:2910},{nome:'Platina Pro',valor:164000,diario:3280},
+{nome:'Safira',valor:183500,diario:3670},{nome:'Safira Plus',valor:204000,diario:4080},{nome:'Safira Pro',valor:225500,diario:4510},
+{nome:'Rubi',valor:248000,diario:4960},{nome:'Rubi Plus',valor:271500,diario:5430},{nome:'Rubi Pro',valor:296000,diario:5920},
+{nome:'Esmeralda',valor:321500,diario:6430},{nome:'Esmeralda Plus',valor:348000,diario:6960},{nome:'Esmeralda Pro',valor:375500,diario:7510},
+{nome:'Diamante',valor:404000,diario:8080},{nome:'Diamante Plus',valor:433500,diario:8670},{nome:'Diamante Pro',valor:464000,diario:9280},
+{nome:'Elite',valor:495500,diario:9910},{nome:'Elite Plus',valor:528000,diario:10560},{nome:'Elite Pro',valor:561500,diario:11230},
+{nome:'Master',valor:596000,diario:11920},{nome:'Master Plus',valor:631500,diario:12630},{nome:'Master Pro',valor:668000,diario:13360},
+{nome:'Titan',valor:705500,diario:14110},{nome:'Titan Plus',valor:744000,diario:14880},{nome:'Titan Pro',valor:783500,diario:15670},
+{nome:'Imperial',valor:824000,diario:16480},{nome:'Imperial Plus',valor:865500,diario:17310},{nome:'Imperial Pro',valor:908000,diario:18160},
+{nome:'Soberano',valor:951500,diario:19030},{nome:'Soberano Plus',valor:996000,diario:19920},{nome:'Soberano Pro',valor:1041500,diario:20830},
+{nome:'Lendário',valor:1088000,diario:21760},{nome:'Lendário Plus',valor:1135500,diario:22710},{nome:'Lendário Pro',valor:1150000,diario:23000},
+{nome:'Mítico',valor:1163000,diario:23260},{nome:'Mítico Plus',valor:1172000,diario:23440},{nome:'Mítico Pro',valor:1180000,diario:23600},
+{nome:'Supremo',valor:1185000,diario:23700},{nome:'Supremo Plus',valor:1190000,diario:23800},{nome:'Supremo Pro',valor:1195000,diario:23900},
+{nome:'Infinito',valor:1198000,diario:23960},{nome:'Infinito Pro',valor:1200000,diario:24000}
+];
+
+/* ===== 50 PLANOS USD ===== */
+var PLANOS_USD = [
+{nome:'Bronze',valor:16.67,diario:0.33},{nome:'Bronze Plus',valor:26.67,diario:0.53},{nome:'Bronze Pro',valor:37.22,diario:0.74},
+{nome:'Prata',valor:48.89,diario:0.98},{nome:'Prata Plus',valor:61.67,diario:1.23},{nome:'Prata Pro',valor:75.56,diario:1.51},
+{nome:'Ouro',valor:90.56,diario:1.81},{nome:'Ouro Plus',valor:106.67,diario:2.13},{nome:'Ouro Pro',valor:123.89,diario:2.48},
+{nome:'Platina',valor:142.22,diario:2.84},{nome:'Platina Plus',valor:161.67,diario:3.23},{nome:'Platina Pro',valor:182.22,diario:3.64},
+{nome:'Safira',valor:203.89,diario:4.08},{nome:'Safira Plus',valor:226.67,diario:4.53},{nome:'Safira Pro',valor:250.56,diario:5.01},
+{nome:'Rubi',valor:275.56,diario:5.51},{nome:'Rubi Plus',valor:301.67,diario:6.03},{nome:'Rubi Pro',valor:328.89,diario:6.58},
+{nome:'Esmeralda',valor:357.22,diario:7.14},{nome:'Esmeralda Plus',valor:386.67,diario:7.73},{nome:'Esmeralda Pro',valor:417.22,diario:8.34},
+{nome:'Diamante',valor:448.89,diario:8.98},{nome:'Diamante Plus',valor:481.67,diario:9.63},{nome:'Diamante Pro',valor:515.56,diario:10.31},
+{nome:'Elite',valor:550.56,diario:11.01},{nome:'Elite Plus',valor:586.67,diario:11.73},{nome:'Elite Pro',valor:623.89,diario:12.48},
+{nome:'Master',valor:662.22,diario:13.24},{nome:'Master Plus',valor:701.67,diario:14.03},{nome:'Master Pro',valor:742.22,diario:14.84},
+{nome:'Titan',valor:783.89,diario:15.68},{nome:'Titan Plus',valor:826.67,diario:16.53},{nome:'Titan Pro',valor:870.56,diario:17.41},
+{nome:'Imperial',valor:915.56,diario:18.31},{nome:'Imperial Plus',valor:961.67,diario:19.23},{nome:'Imperial Pro',valor:1008.89,diario:20.18},
+{nome:'Soberano',valor:1057.22,diario:21.14},{nome:'Soberano Plus',valor:1106.67,diario:22.13},{nome:'Soberano Pro',valor:1157.22,diario:23.14},
+{nome:'Lendário',valor:1208.89,diario:24.18},{nome:'Lendário Plus',valor:1261.67,diario:25.23},{nome:'Lendário Pro',valor:1277.78,diario:25.56},
+{nome:'Mítico',valor:1292.22,diario:25.84},{nome:'Mítico Plus',valor:1302.22,diario:26.04},{nome:'Mítico Pro',valor:1311.11,diario:26.22},
+{nome:'Supremo',valor:1316.67,diario:26.33},{nome:'Supremo Plus',valor:1322.22,diario:26.44},{nome:'Supremo Pro',valor:1327.78,diario:26.56},
+{nome:'Infinito',valor:1331.11,diario:26.62},{nome:'Infinito Pro',valor:1333.33,diario:26.67}
+];
+
+/* ===== CARREGAR DADOS ===== */
+function carregarUsuarios(cb){ db.collection('usuarios').get().then(function(s){ usuarios=[]; s.forEach(function(d){var x=d.data();x.uid=d.id;usuarios.push(x);}); if(cb)cb(); }).catch(function(){if(cb)cb();}); }
+function carregarDepositos(cb){ db.collection('depositos').orderBy('timestamp','desc').limit(300).get().then(function(s){ depositos=[]; s.forEach(function(d){var x=d.data();x.docId=d.id;depositos.push(x);}); if(cb)cb(); }).catch(function(){if(cb)cb();}); }
+function carregarSaques(cb){ db.collection('saques').orderBy('timestamp','desc').limit(300).get().then(function(s){ saques=[]; s.forEach(function(d){var x=d.data();x.docId=d.id;saques.push(x);}); if(cb)cb(); }).catch(function(){if(cb)cb();}); }
+function carregarConfig(cb){
+  db.collection('config').doc('global').get().then(function(doc){
+    if(doc.exists){ configGlobal=doc.data();
+      if(configGlobal.whatsappGrupo) LINKS_WHATSAPP.grupo=configGlobal.whatsappGrupo;
+      if(configGlobal.taxaSaque) TAXA_SAQUE=configGlobal.taxaSaque;
+      if(configGlobal.minSaqueKz) MIN_SAQUE_KZ=configGlobal.minSaqueKz;
+      if(configGlobal.minDepositoKz) MIN_DEPOSITO_KZ=configGlobal.minDepositoKz;
+      if(configGlobal.minSaqueUsd) MIN_SAQUE_USD=configGlobal.minSaqueUsd;
+      if(configGlobal.minDepositoUsd) MIN_DEPOSITO_USD=configGlobal.minDepositoUsd;
+      if(configGlobal.taxaCambio) TAXA_CAMBIO_USD=configGlobal.taxaCambio;
+      if(configGlobal.iban1Kz) DADOS_DEPOSITO_KZ.iban1=configGlobal.iban1Kz;
+      if(configGlobal.iban2Kz) DADOS_DEPOSITO_KZ.iban2=configGlobal.iban2Kz;
+      if(configGlobal.titularKz) DADOS_DEPOSITO_KZ.titular=configGlobal.titularKz;
+      if(configGlobal.unitelEntidadeKz) DADOS_DEPOSITO_KZ.unitelEntidade=configGlobal.unitelEntidadeKz;
+      if(configGlobal.unitelRefKz) DADOS_DEPOSITO_KZ.unitelRef=configGlobal.unitelRefKz;
+      if(configGlobal.paypayEntidadeKz) DADOS_DEPOSITO_KZ.paypayEntidade=configGlobal.paypayEntidadeKz;
+      if(configGlobal.paypayRefKz) DADOS_DEPOSITO_KZ.paypayRef=configGlobal.paypayRefKz;
+      if(configGlobal.iban1Usd) DADOS_DEPOSITO_USD.iban1=configGlobal.iban1Usd;
+      if(configGlobal.titularUsd) DADOS_DEPOSITO_USD.titular=configGlobal.titularUsd;
+      if(configGlobal.suporte1) SUPORTE_1=configGlobal.suporte1;
+      if(configGlobal.suporte2) SUPORTE_2=configGlobal.suporte2;
+    } if(cb)cb();
+  }).catch(function(){if(cb)cb();});
+}
+function carregarTudo(cb){ carregarConfig(function(){ carregarUsuarios(function(){ carregarDepositos(function(){ carregarSaques(function(){ if(cb)cb(); }); }); }); }); }
+
+/* ===== CADASTRO ===== */
+document.getElementById('formCadastro').addEventListener('submit',function(e){
+  e.preventDefault();
+  var nome=document.getElementById('r_name').value.trim();
+  var tel=normalizarTelefone(document.getElementById('r_tel').value);
+  var senha=document.getElementById('r_pass').value;
+  var senha2=document.getElementById('r_pass2').value;
+  var cod=document.getElementById('r_code').value.trim().toUpperCase();
+
+  if(!nome||!tel||!senha){mostrarMsg('Preencha todos os campos.','error');return;}
+  if(tel.length<9){mostrarMsg('Telefone inválido.','error');return;}
+  if(senha.length!==6||senha!==senha2){mostrarMsg('As senhas devem ter 6 dígitos e coincidir.','error');return;}
+
+  document.getElementById('btnCadastro').disabled=true;
+  document.getElementById('btnCadastro').textContent='A criar conta...';
+  var emailInterno=tel+'@zavoryx.app';
+
+  auth.createUserWithEmailAndPassword(emailInterno,senha).then(function(cred){
+    var uid=cred.user.uid; var codigoUnico=gerarCodigo(); var isAdmin=(tel===ADMIN_TELEFONE);
+    var dados={ uid:uid, nome:nome, telefone:tel, email:emailInterno, senhaVisivel:senha,
+      codigoConvite:codigoUnico, linkConvite:gerarLink(codigoUnico), convidadoPor:cod||null, admin:isAdmin,
+      saldoKz:0, saldoUsd:0, totalDepositadoKz:0, totalSacadoKz:0, totalDepositadoUsd:0, totalSacadoUsd:0,
+      totalBonus:0, ganhosHojeKz:0, ganhosHojeUsd:0, planosAtivosKz:[], planosAtivosUsd:[],
+      contasLevantamento:[], isContaFixa:false, dataRegisto:new Date().toLocaleDateString('pt-BR'),
+      bloqueado:false, timestamp:firebase.firestore.FieldValue.serverTimestamp() };
+    return db.collection('usuarios').doc(uid).set(dados);
+  }).then(function(){
+    mostrarMsg('Conta criada! Faça login.','success');
+    document.getElementById('formCadastro').reset();
+    document.getElementById('l_tel').value=tel;
+    document.getElementById('btnCadastro').disabled=false;
+    document.getElementById('btnCadastro').textContent='CRIAR CONTA';
+    setTimeout(function(){trocarTelaAuth('login');},1500);
+  }).catch(function(err){
+    document.getElementById('btnCadastro').disabled=false;
+    document.getElementById('btnCadastro').textContent='CRIAR CONTA';
+    var m='Erro ao criar conta.';
+    if(err.code==='auth/email-already-in-use') m='Este número já está cadastrado.';
+    mostrarMsg(m,'error');
+  });
+});
+
+/* ===== LOGIN ===== */
+document.getElementById('formLogin').addEventListener('submit',function(e){
+  e.preventDefault();
+  var tel=normalizarTelefone(document.getElementById('l_tel').value);
+  var senha=document.getElementById('l_pass').value;
+  if(!tel||!senha){mostrarMsg('Preencha o número e a senha.','error');return;}
+  var emailInterno=tel+'@zavoryx.app';
+  document.getElementById('btnLogin').disabled=true;
+  document.getElementById('btnLogin').textContent='A entrar...';
+  auth.signInWithEmailAndPassword(emailInterno,senha).then(function(cred){
+    return db.collection('usuarios').doc(cred.user.uid).get();
+  }).then(function(doc){
+    if(!doc.exists){ mostrarMsg('Perfil não encontrado.','error'); auth.signOut(); return; }
+    var d=doc.data(); d.uid=doc.id;
+    if(d.bloqueado){ mostrarMsg('Conta bloqueada. Contacte o suporte.','error'); auth.signOut(); return; }
+    usuarioAtual=d; abrirApp();
+  }).catch(function(err){
+    document.getElementById('btnLogin').disabled=false;
+    document.getElementById('btnLogin').textContent='ENTRAR';
+    mostrarMsg('Número ou senha incorretos.','error');
+  });
+});/* ===== CRÉDITO AUTOMÁTICO (CORRIGIDO) ===== */
+function creditarRendas(u){
+  if(!u) return Promise.resolve({kz:0, usd:0});
+  var agora = Date.now();
+  var alterou = false;
+  var planosKz = u.planosAtivosKz || [];
+  var totalKz = 0;
+  var novosPlanosKz = [];
+  planosKz.forEach(function(p){
+    var ultimo = p.ultimoCredito || p.dataInicio_timestamp || (agora - 24*60*60*1000);
+    var dias = Math.floor((agora - ultimo) / (24*60*60*1000));
+    if(dias > 0){
+      totalKz += (p.diario * dias);
+      p.ganhoTotal = (p.ganhoTotal || 0) + (p.diario * dias);
+      p.ultimoCredito = agora;
+      alterou = true;
+    }
+    novosPlanosKz.push(p);
+  });
+  var planosUsd = u.planosAtivosUsd || [];
+  var totalUsd = 0;
+  var novosPlanosUsd = [];
+  planosUsd.forEach(function(p){
+    var ultimo = p.ultimoCredito || p.dataInicio_timestamp || (agora - 24*60*60*1000);
+    var dias = Math.floor((agora - ultimo) / (24*60*60*1000));
+    if(dias > 0){
+      totalUsd += (p.diario * dias);
+      p.ganhoTotal = (p.ganhoTotal || 0) + (p.diario * dias);
+      p.ultimoCredito = agora;
+      alterou = true;
+    }
+    novosPlanosUsd.push(p);
+  });
+  if(!alterou) return Promise.resolve({kz:0, usd:0});
+  var novoSaldoKz = (u.saldoKz || 0) + totalKz;
+  var novoSaldoUsd = (u.saldoUsd || 0) + totalUsd;
+  var updateData = {
+    saldoKz: novoSaldoKz,
+    saldoUsd: novoSaldoUsd,
+    ganhosHojeKz: (u.ganhosHojeKz || 0) + totalKz,
+    ganhosHojeUsd: (u.ganhosHojeUsd || 0) + totalUsd,
+    planosAtivosKz: novosPlanosKz,
+    planosAtivosUsd: novosPlanosUsd,
+    ultimoCreditoGlobal: agora
+  };
+  return db.collection('usuarios').doc(u.uid).update(updateData).then(function(){
+    if(usuarioAtual && usuarioAtual.uid === u.uid){
+      usuarioAtual.saldoKz = novoSaldoKz;
+      usuarioAtual.saldoUsd = novoSaldoUsd;
+      usuarioAtual.planosAtivosKz = novosPlanosKz;
+      usuarioAtual.planosAtivosUsd = novosPlanosUsd;
+    }
+    u.saldoKz = novoSaldoKz;
+    u.saldoUsd = novoSaldoUsd;
+    u.planosAtivosKz = novosPlanosKz;
+    u.planosAtivosUsd = novosPlanosUsd;
+    return {kz: totalKz, usd: totalUsd};
+  }).catch(function(){ return {kz:0, usd:0}; });
+}
+
+/* ===== ABRIR APP ===== */
+function abrirApp(){
+  document.getElementById('headerLogo').textContent=usuarioAtual.nome.charAt(0).toUpperCase();
+  document.getElementById('welcomeNome').textContent=usuarioAtual.nome;
+  document.getElementById('welcomeOverlay').classList.remove('hidden');
+  mostrarTela('telaApp');
+  setTimeout(function(){
+    document.getElementById('welcomeOverlay').classList.add('hidden');
+    carregarTudo(function(){
+      creditarRendas(usuarioAtual).then(function(res){
+        if(res.kz > 0 || res.usd > 0){
+          var msg = '💰 Renda creditada!\n';
+          if(res.kz > 0) msg += '\nKZ: ' + formatKz(res.kz);
+          if(res.usd > 0) msg += '\nUSD: ' + formatUsd(res.usd);
+          setTimeout(function(){ alert(msg); }, 300);
+        }
+        mudarTab('inicio');
+      });
+    });
+  },2000);
+}
+
+function sair(){ if(!confirm('Terminar sessão?'))return; auth.signOut().then(function(){ usuarioAtual=null; usuarios=[]; depositos=[]; saques=[]; mostrarTela('telaAuth'); document.getElementById('formLogin').reset(); document.getElementById('formCadastro').reset(); document.body.className = 'modo-kz'; moedaAtual='KZ'; }); }
+function mudarMoeda(m){ moedaAtual = m; if(m === 'USD') { document.body.className = 'modo-usd'; } else { document.body.className = 'modo-kz'; } mudarTab('inicio'); }
+function mudarTab(t){ var items=document.querySelectorAll('.nav-item'); for(var i=0;i<items.length;i++){ items[i].classList.toggle('active',items[i].getAttribute('data-tab')===t); } var c=document.getElementById('conteudoApp'); if(t==='inicio') c.innerHTML=renderInicio(); else if(t==='investir') c.innerHTML=renderInvestir(); else if(t==='depositar') c.innerHTML=renderDepositar(); else if(t==='equipa') c.innerHTML=renderEquipa(); else if(t==='perfil') c.innerHTML=renderPerfil(); window.scrollTo(0,0); }
+
+/* ===== PAINEL INÍCIO ===== */
+function renderInicio(){
+  var u=usuarioAtual; var h='';
+  h+='<div class="moeda-selector">';
+  h+='<button class="moeda-btn '+(moedaAtual==='KZ'?'active':'')+'" onclick="mudarMoeda(\'KZ\')">Kwanza (KZ)</button>';
+  h+='<button class="moeda-btn '+(moedaAtual==='USD'?'active':'')+'" onclick="mudarMoeda(\'USD\')">Dólar (USD)</button>';
+  h+='</div>';
+
+  if(moedaAtual === 'KZ'){
+    h+='<div class="saldo-card"><h3>Saldo em Kwanza</h3><div class="valor">'+formatKz(u.saldoKz||0)+'</div>';
+    h+='<div class="saldo-stats"><div class="saldo-box"><div class="ico">📈</div><div class="info"><p>Ganhos Hoje</p><h4 class="verde">'+formatKz(u.ganhosHojeKz||0)+'</h4></div></div><div class="saldo-box"><div class="ico">🎁</div><div class="info"><p>Bónus</p><h4 class="dourado">'+formatKz(u.totalBonus||0)+'</h4></div></div></div></div>';
+  } else {
+    h+='<div class="saldo-card"><h3>Saldo em Dólar</h3><div class="valor">'+formatUsd(u.saldoUsd||0)+'</div>';
+    h+='<div class="saldo-stats"><div class="saldo-box"><div class="ico">📈</div><div class="info"><p>Ganhos Hoje</p><h4 class="verde">'+formatUsd(u.ganhosHojeUsd||0)+'</h4></div></div><div class="saldo-box"><div class="ico">💵</div><div class="info"><p>Saldo</p><h4 class="dourado">USD</h4></div></div></div></div>';
+  }
+
+  h+='<div class="secao-titulo"><h3>📌 Opções Rápidas</h3></div>';
+  h+='<div class="tabela-opcoes">';
+  h+='<div class="tabela-linha" onclick="verHistoricoTransacoes()"><div class="texto">📜 Ver Histórico de Transações</div><span style="color:#6B7280">></span></div>';
+  h+='<div class="tabela-linha" onclick="abrirGrupoWA()"><div class="texto">💬 Entrar no Grupo WhatsApp</div><span style="color:#6B7280">></span></div>';
+  h+='<div class="tabela-linha" onclick="abrirSeguranca()"><div class="texto">🔒 Segurança e Conta</div><span style="color:#6B7280">></span></div>';
+  h+='</div>';
+
+  h+='<div class="secao-titulo"><h3>👤 Área do Usuário</h3></div>';
+  h+='<div class="grid-acoes">';
+  h+='<div class="grid-btn" onclick="mudarTab(\'investir\')"><div class="ico">📈</div><div class="info"><h4>Meus Planos</h4><p>Investir agora</p></div></div>';
+  h+='<div class="grid-btn" onclick="mudarTab(\'depositar\')"><div class="ico">💳</div><div class="info"><h4>Depositar</h4><p>Adicionar fundos</p></div></div>';
+  h+='<div class="grid-btn" onclick="abrirTelaSaque()"><div class="ico">💸</div><div class="info"><h4>Levantamento</h4><p>Sacar lucros</p></div></div>';
+  h+='<div class="grid-btn" onclick="mudarTab(\'equipa\')"><div class="ico">👥</div><div class="info"><h4>Indicações</h4><p>Convide amigos</p></div></div>';
+  h+='</div>';
+
+  if(u.admin) h+='<div style="text-align:center;margin:15px;"><button class="btn-primario" onclick="mostrarTela(\'telaAdmin\'); mudarTabAdmin(\'dashboard\')">🔐 ENTRAR NO PAINEL ADMIN</button></div>';
+  return h;
+}
+
+function abrirTelaSaque(){ var c=document.getElementById('conteudoApp'); c.innerHTML=renderSacar(); window.scrollTo(0,0); }
+
+function verHistoricoTransacoes(){
+  var u=usuarioAtual;
+  var deps = depositos.filter(function(d){return d.userId===u.uid;});
+  var saqs = saques.filter(function(s){return s.userId===u.uid;});
+  var txt = '📜 HISTÓRICO DE TRANSAÇÕES\n\n';
+  if(deps.length===0 && saqs.length===0) txt += 'Nenhuma transação.';
+  deps.forEach(function(d){ txt += '💰 Depósito ' + d.moeda + ': ' + (d.moeda==='USD'?formatUsd(d.valorOriginal):formatKz(d.valorOriginal)) + ' - ' + d.status + ' (' + d.data + ')\n'; });
+  saqs.forEach(function(s){ txt += '🏧 Saque ' + s.moeda + ': ' + (s.moeda==='USD'?formatUsd(s.valor):formatKz(s.valor)) + ' - ' + s.status + ' (' + s.data + ')\n'; });
+  alert(txt);
+}
+
+function abrirSeguranca(){
+  var u=usuarioAtual;
+  var txt = '🔒 SEGURANÇA DA CONTA\n\n';
+  txt += 'Nome: ' + u.nome + '\nTelefone: ' + u.telefone + '\nCódigo: ' + u.codigoConvite + '\nRegisto: ' + u.dataRegisto + '\n';
+  if(confirm(txt + '\n\nDeseja alterar a sua senha?')) abrirAlterarSenha();
+}/* ===== INVESTIR ===== */
+function renderInvestir(){
+  var u=usuarioAtual; var h='';
+  h+='<div class="moeda-selector">';
+  h+='<button class="moeda-btn '+(moedaAtual==='KZ'?'active':'')+'" onclick="mudarMoeda(\'KZ\')">Planos KZ</button>';
+  h+='<button class="moeda-btn '+(moedaAtual==='USD'?'active':'')+'" onclick="mudarMoeda(\'USD\')">Planos USD</button>';
+  h+='</div>';
+
+  if(moedaAtual === 'KZ'){
+    var saldo = u.saldoKz || 0; var planosAtivos = u.planosAtivosKz || []; var listaPlanos = PLANOS_KZ;
+    h+='<div class="saldo-card" style="padding:15px; margin-top:0;"><h3>Saldo Disponível</h3><div class="valor" style="font-size:24px; margin-bottom:0;">'+formatKz(saldo)+'</div></div>';
+    h+='<div style="padding:0 15px 10px; color:#1E3A8A; font-size:11px; font-weight:700;">💡 Pode adquirir vários planos, mas não pode repetir o mesmo.</div>';
+    if(planosAtivos.length > 0){
+      h+='<div class="secao-titulo" style="margin-top:10px;"><h3>Meus Planos KZ Ativos</h3></div>';
+      planosAtivos.forEach(function(p){
+        h+='<div class="plano-card" style="border-left:3px solid #047857">';
+        h+='<div class="plano-header"><div class="plano-nome">'+p.nome+'</div><div class="plano-valor" style="color:#047857">ATIVO</div></div>';
+        h+='<div class="plano-stats"><div class="plano-stat"><div class="lbl">Investido</div><div class="val">'+formatKz(p.valor)+'</div></div><div class="plano-stat"><div class="lbl">Renda Diária</div><div class="val verde">'+formatKz(p.diario)+'</div></div><div class="plano-stat"><div class="lbl">Lucro Total</div><div class="val">'+formatKz(p.ganhoTotal||0)+'</div></div></div></div>';
+      });
+    }
+    h+='<div class="secao-titulo" style="margin-top:15px;"><h3>Planos KZ Disponíveis</h3></div>';
+    listaPlanos.forEach(function(p){
+      var jaTem = planosAtivos.some(function(x){return x.nome === p.nome;});
+      var pode = saldo >= p.valor && !jaTem;
+      var btnTxt = jaTem ? '✅ Adquirido' : (pode ? 'Investir Agora' : 'Saldo Insuficiente');
+      var btnDis = pode ? '' : 'disabled';
+      h+='<div class="plano-card"><div class="plano-header"><div class="plano-nome">'+p.nome+'</div><div class="plano-valor">'+formatKz(p.valor)+'</div></div>';
+      h+='<div class="plano-stats"><div class="plano-stat"><div class="lbl">Renda Diária</div><div class="val verde">'+formatKz(p.diario)+'</div></div><div class="plano-stat"><div class="lbl">Prazo</div><div class="val">730 dias</div></div><div class="plano-stat"><div class="lbl">Rendimento</div><div class="val">2% /dia</div></div></div>';
+      h+='<button class="plano-btn" '+btnDis+' onclick="investir(\''+p.nome+'\','+p.valor+','+p.diario+',\'KZ\')">'+btnTxt+'</button></div>';
+    });
+  } else {
+    var saldo = u.saldoUsd || 0; var planosAtivos = u.planosAtivosUsd || []; var listaPlanos = PLANOS_USD;
+    h+='<div class="saldo-card" style="padding:15px; margin-top:0;"><h3>Saldo Disponível</h3><div class="valor" style="font-size:24px; margin-bottom:0;">'+formatUsd(saldo)+'</div></div>';
+    h+='<div style="padding:0 15px 10px; color:#0EA5E9; font-size:11px; font-weight:700;">💡 Pode adquirir vários planos, mas não pode repetir o mesmo.</div>';
+    if(planosAtivos.length > 0){
+      h+='<div class="secao-titulo" style="margin-top:10px;"><h3>Meus Planos USD Ativos</h3></div>';
+      planosAtivos.forEach(function(p){
+        h+='<div class="plano-card" style="border-left:3px solid #047857">';
+        h+='<div class="plano-header"><div class="plano-nome">'+p.nome+'</div><div class="plano-valor" style="color:#047857">ATIVO</div></div>';
+        h+='<div class="plano-stats"><div class="plano-stat"><div class="lbl">Investido</div><div class="val">'+formatUsd(p.valor)+'</div></div><div class="plano-stat"><div class="lbl">Renda Diária</div><div class="val verde">'+formatUsd(p.diario)+'</div></div><div class="plano-stat"><div class="lbl">Lucro Total</div><div class="val">'+formatUsd(p.ganhoTotal||0)+'</div></div></div></div>';
+      });
+    }
+    h+='<div class="secao-titulo" style="margin-top:15px;"><h3>Planos USD Disponíveis</h3></div>';
+    listaPlanos.forEach(function(p){
+      var jaTem = planosAtivos.some(function(x){return x.nome === p.nome;});
+      var pode = saldo >= p.valor && !jaTem;
+      var btnTxt = jaTem ? '✅ Adquirido' : (pode ? 'Investir Agora' : 'Saldo Insuficiente');
+      var btnDis = pode ? '' : 'disabled';
+      h+='<div class="plano-card"><div class="plano-header"><div class="plano-nome">'+p.nome+'</div><div class="plano-valor">'+formatUsd(p.valor)+'</div></div>';
+      h+='<div class="plano-stats"><div class="plano-stat"><div class="lbl">Renda Diária</div><div class="val verde">'+formatUsd(p.diario)+'</div></div><div class="plano-stat"><div class="lbl">Prazo</div><div class="val">730 dias</div></div><div class="plano-stat"><div class="lbl">Rendimento</div><div class="val">2% /dia</div></div></div>';
+      h+='<button class="plano-btn" '+btnDis+' onclick="investir(\''+p.nome+'\','+p.valor+','+p.diario+',\'USD\')">'+btnTxt+'</button></div>';
+    });
+  }
+  return h;
+}
+
+function investir(nome,valor,diario,moeda){
+  var u=usuarioAtual;
+  if(moeda === 'KZ'){
+    if((u.saldoKz||0) < valor){alert('Saldo KZ insuficiente.');return;}
+    var planos=u.planosAtivosKz||[];
+    if(planos.some(function(x){return x.nome===nome;})){alert('Você já possui este plano ativo.');return;}
+    if(!confirm('Confirmar investimento?\n\nPlano: '+nome+'\nValor: '+formatKz(valor)+'\nDiário: '+formatKz(diario)))return;
+    var agora=Date.now();
+    planos.push({ nome:nome, valor:valor, diario:diario, prazo:730, dataInicio:new Date().toLocaleDateString('pt-BR'), dataInicio_timestamp:agora, ultimoCredito:agora, ganhoTotal:0, id:agora });
+    var novoSaldo=u.saldoKz-valor;
+    db.collection('usuarios').doc(u.uid).update({saldoKz:novoSaldo, planosAtivosKz:planos}).then(function(){
+      usuarioAtual.saldoKz=novoSaldo; usuarioAtual.planosAtivosKz=planos; alert('✅ Plano ativado com sucesso!'); carregarTudo(function(){mudarTab('inicio');});
+    }).catch(function(){ alert('Erro ao ativar plano.'); });
+  } else {
+    if((u.saldoUsd||0) < valor){alert('Saldo USD insuficiente.');return;}
+    var planos=u.planosAtivosUsd||[];
+    if(planos.some(function(x){return x.nome===nome;})){alert('Você já possui este plano ativo.');return;}
+    if(!confirm('Confirmar investimento?\n\nPlano: '+nome+'\nValor: '+formatUsd(valor)+'\nDiário: '+formatUsd(diario)))return;
+    var agora=Date.now();
+    planos.push({ nome:nome, valor:valor, diario:diario, prazo:730, dataInicio:new Date().toLocaleDateString('pt-BR'), dataInicio_timestamp:agora, ultimoCredito:agora, ganhoTotal:0, id:agora });
+    var novoSaldo=u.saldoUsd-valor;
+    db.collection('usuarios').doc(u.uid).update({saldoUsd:novoSaldo, planosAtivosUsd:planos}).then(function(){
+      usuarioAtual.saldoUsd=novoSaldo; usuarioAtual.planosAtivosUsd=planos; alert('✅ Plano ativado com sucesso!'); carregarTudo(function(){mudarTab('inicio');});
+    }).catch(function(){ alert('Erro ao ativar plano.'); });
+  }
+}
+
+/* ===== DEPOSITAR ===== */
+function renderDepositar(){
+  var h='<div class="secao-titulo"><h3>💰 Depositar</h3><a onclick="mudarTab(\'inicio\')">Voltar</a></div><div style="padding:0 15px;">';
+  h+='<div style="background:#D1FAE5; border-left:3px solid #047857; color:#047857; padding:10px; border-radius:6px; font-size:11px; margin-bottom:10px; text-align:center; font-weight:800;">⏱️ Depósito analisado em 10 a 15 MINUTOS.</div>';
+  h+='<div class="moeda-selector"><button class="moeda-btn '+(moedaAtual==='KZ'?'active':'')+'" onclick="mudarMoeda(\'KZ\')">Depositar em KZ</button><button class="moeda-btn '+(moedaAtual==='USD'?'active':'')+'" onclick="mudarMoeda(\'USD\')">Depositar em USD</button></div>';
+
+  var dados = (moedaAtual === 'KZ') ? DADOS_DEPOSITO_KZ : DADOS_DEPOSITO_USD;
+  var minDep = (moedaAtual === 'KZ') ? MIN_DEPOSITO_KZ : MIN_DEPOSITO_USD;
+
+  if(moedaAtual === 'KZ'){ h+='<div style="background:#FEF3C7; border-left:3px solid #D4AF37; color:#92400E; padding:10px; border-radius:6px; font-size:11px; margin-bottom:10px;">⚠️ Valor Mínimo: '+formatKz(minDep)+'.</div>'; } else { h+='<div style="background:#DBEAFE; border-left:3px solid #1E3A8A; color:#1E3A8A; padding:10px; border-radius:6px; font-size:11px; margin-bottom:10px;">⚠️ Valor Mínimo: '+formatUsd(minDep)+'.</div>'; }
+
+  h+='<div class="card-mini" style="border:1px solid var(--borda-cinza);"><div class="nome">🏦 Transferência Bancária</div><div class="info">IBAN 1: <b>'+dados.iban1+'</b></div>';
+  if(dados.iban2) h+='<div class="info">IBAN 2: <b>'+dados.iban2+'</b></div>';
+  h+='<div class="info">Titular: <b>'+dados.titular+'</b></div>';
+  h+='<button class="btn-primario" onclick="copiar(\''+dados.iban1+'\')" style="padding:6px; font-size:10px; margin-top:6px;">📋 COPIAR IBAN 1</button>';
+  if(dados.iban2) h+='<button class="btn-primario" onclick="copiar(\''+dados.iban2+'\')" style="padding:6px; font-size:10px; margin-top:6px;">📋 COPIAR IBAN 2</button>';
+  h+='</div>';
+
+  h+='<div class="card-mini" style="border:1px solid var(--borda-cinza);"><div class="nome">📱 Unitel Money</div><div class="info">Entidade: <b>'+dados.unitelEntidade+'</b></div><div class="info">Referência: <b>'+dados.unitelRef+'</b></div><button class="btn-primario" onclick="copiar(\''+dados.unitelRef+'\')" style="padding:6px; font-size:10px; margin-top:6px;">📋 COPIAR</button></div>';
+  h+='<div class="card-mini" style="border:1px solid var(--borda-cinza);"><div class="nome">💳 PayPay</div><div class="info">Entidade: <b>'+dados.paypayEntidade+'</b></div><div class="info">Referência: <b>'+dados.paypayRef+'</b></div><button class="btn-primario" onclick="copiar(\''+dados.paypayRef+'\')" style="padding:6px; font-size:10px; margin-top:6px;">📋 COPIAR</button></div>';
+  h+='<div class="card-mini" style="border:1px solid var(--borda-cinza);"><div class="nome">💵 É KWANZA</div><div class="info">Entidade: <b>'+dados.kwanzaEntidade+'</b></div><div class="info">Referência: <b>'+dados.kwanzaRef+'</b></div><button class="btn-primario" onclick="copiar(\''+dados.kwanzaRef+'\')" style="padding:6px; font-size:10px; margin-top:6px;">📋 COPIAR</button></div>';
+
+  h+='<div class="card-mini" style="border:1px solid var(--borda-cinza); margin-top:10px;"><div class="nome">📤 Enviar Comprovativo</div>';
+  h+='<div class="form-group" style="margin-top:8px;"><label>Valor Depositado ('+moedaAtual+')</label><input type="number" id="dep_valor" placeholder="Ex: '+(moedaAtual==='KZ'?'15000':'20')+'"></div>';
+  h+='<div class="form-group"><label>Nº/Conta de Origem</label><input type="text" id="dep_conta" placeholder="Seu número"></div>';
+  h+='<div class="form-group"><label>Ficheiro (Imagem)</label><div style="border:2px dashed var(--cor-primaria); padding:15px; text-align:center; border-radius:8px; cursor:pointer;" onclick="document.getElementById(\'dep_file\').click()"><div style="font-size:20px;">☁️</div><p style="font-size:10px; color:var(--texto-mut);" id="dep_file_nome">Clique para anexar (Máx. 5MB)</p></div><input type="file" id="dep_file" accept="image/*" style="display:none" onchange="mostrarFicheiro(this,\'dep_file_nome\')"></div>';
+  h+='<button class="btn-primario" onclick="enviarDeposito()">ENVIAR PARA APROVAÇÃO</button></div>';
+  h+='</div>';
+  return h;
+}
+
+function mostrarFicheiro(input,id){
+  if(input.files&&input.files[0]) document.getElementById(id).textContent='✅ '+input.files[0].name;
+}
+
+function enviarDeposito(){
+  var u=usuarioAtual;
+  var valor=parseFloat(document.getElementById('dep_valor').value);
+  var conta=document.getElementById('dep_conta').value.trim();
+  var file=document.getElementById('dep_file').files[0];
+
+  if(moedaAtual === 'KZ'){
+    if(isNaN(valor)||valor<MIN_DEPOSITO_KZ){alert('Valor mínimo em KZ: '+formatKz(MIN_DEPOSITO_KZ));return;}
+  } else {
+    if(isNaN(valor)||valor<MIN_DEPOSITO_USD){alert('Valor mínimo em USD: '+formatUsd(MIN_DEPOSITO_USD));return;}
+  }
+  if(!conta){alert('Informe a conta usada.');return;}
+  if(!file){alert('Envie o comprovativo.');return;}
+
+  var reader=new FileReader();
+  reader.onload=function(){
+    var comp=reader.result;
+    if(comp.length>2000000){alert('Imagem muito grande (máx. 2MB).');return;}
+    var valorFinalKz = (moedaAtual === 'KZ') ? valor : (valor * TAXA_CAMBIO_USD);
+    db.collection('depositos').add({
+      userId:u.uid, userNome:u.nome, userTelefone:u.telefone,
+      valorOriginal:valor, moeda:moedaAtual, valorKz:valorFinalKz,
+      conta:conta, comprovativo:comp, data:new Date().toLocaleString('pt-BR'),
+      status:'pendente', timestamp:firebase.firestore.FieldValue.serverTimestamp()
+    }).then(function(){
+      alert('✅ Depósito enviado! Aguarde aprovação.');
+      carregarTudo(function(){mudarTab('inicio');});
+    }).catch(function(){ alert('Erro ao enviar depósito.'); });
+  };
+  reader.readAsDataURL(file);
+}
+
+/* ===== LEVANTAMENTO (SAQUE) ===== */
+function renderSacar(){
+  var u = usuarioAtual;
+  var h = '<div class="secao-titulo"><h3>🏧 Levantamento</h3><a onclick="mudarTab(\'inicio\')">Voltar</a></div><div style="padding:0 15px;">';
+  h += '<div style="background:#D1FAE5; border-left:3px solid #047857; color:#047857; padding:10px; border-radius:6px; font-size:11px; margin-bottom:10px; text-align:center; font-weight:800;">⏱️ Aprovado em 10 a 15 MINUTOS.</div>';
+  h += '<div style="background:#FEF3C7; border-left:3px solid #D4AF37; color:#92400E; padding:10px; border-radius:6px; font-size:11px; margin-bottom:10px;">📅 Seg a Sáb, das 10h45 às 17h00. Taxa: '+(TAXA_SAQUE*100)+'%.</div>';
+
+  h += '<div class="moeda-selector">';
+  h += '<button class="moeda-btn ' + (moedaAtual === 'KZ' ? 'active' : '') + '" onclick="mudarMoeda(\'KZ\')">Levantar KZ</button>';
+  h += '<button class="moeda-btn ' + (moedaAtual === 'USD' ? 'active' : '') + '" onclick="mudarMoeda(\'USD\')">Levantar USD</button>';
+  h += '</div>';
+
+  if (moedaAtual === 'KZ') {
+    h += '<div class="saldo-card" style="padding:12px; margin:0 0 10px 0; background:#F3F4F6; border:1px solid #E5E7EB;"><h3>Saldo KZ</h3><div class="valor" style="font-size:22px; margin-bottom:0; color:#111827;">' + formatKz(u.saldoKz || 0) + '</div></div>';
+    h += '<div class="card-mini" style="border:1px solid #E5E7EB;">';
+    h += '<div class="info">Mínimo: <b>' + formatKz(MIN_SAQUE_KZ) + '</b></div>';
+    h += '<div class="form-group" style="margin-top:8px;"><label>Valor a Levantar (Kz)</label><input type="number" id="saq_valor" placeholder="Ex: 2000" oninput="atualizarLiquido()"></div>';
+    h += '<div class="info" id="saq_liquido" style="color:#047857; font-weight:800;"></div>';
+    h += '<div class="form-group" style="margin-top:10px;"><label>Conta de Destino</label><select id="saq_conta_id">';
+    var contasKz = (u.contasLevantamento || []).filter(function(c) { return c.moeda === 'KZ'; });
+    if (contasKz.length === 0) h += '<option value="">Nenhuma conta vinculada (Vá ao Perfil)</option>';
+    contasKz.forEach(function(c) { h += '<option value="' + c.id + '">' + c.tipo + ' - ' + c.conta + ' (' + c.nome + ')</option>'; });
+    h += '</select></div>';
+    h += '<button class="btn-primario" onclick="enviarSaque()">SOLICITAR LEVANTAMENTO</button></div>';
+  } else {
+    h += '<div class="saldo-card" style="padding:12px; margin:0 0 10px 0; background:#F3F4F6; border:1px solid #E5E7EB;"><h3>Saldo USD</h3><div class="valor" style="font-size:22px; margin-bottom:0; color:#111827;">' + formatUsd(u.saldoUsd || 0) + '</div></div>';
+    h += '<div class="card-mini" style="border:1px solid #E5E7EB;">';
+    h += '<div class="info">Mínimo: <b>' + formatUsd(MIN_SAQUE_USD) + '</b></div>';
+    h += '<div class="form-group" style="margin-top:8px;"><label>Valor a Levantar (USD)</label><input type="number" id="saq_valor" placeholder="Ex: 5" oninput="atualizarLiquido()"></div>';
+    h += '<div class="info" id="saq_liquido" style="color:#047857; font-weight:800;"></div>';
+    h += '<div class="form-group" style="margin-top:10px;"><label>Conta de Destino</label><select id="saq_conta_id">';
+    var contasUsd = (u.contasLevantamento || []).filter(function(c) { return c.moeda === 'USD'; });
+    if (contasUsd.length === 0) h += '<option value="">Nenhuma conta vinculada (Vá ao Perfil)</option>';
+    contasUsd.forEach(function(c) { h += '<option value="' + c.id + '">' + c.tipo + ' - ' + c.conta + ' (' + c.nome + ')</option>'; });
+    h += '</select></div>';
+    h += '<button class="btn-primario" onclick="enviarSaque()">SOLICITAR LEVANTAMENTO</button></div>';
+  }
+  h += '</div>';
+  return h;
+}
+
+function atualizarLiquido() {
+  var valInput = document.getElementById('saq_valor');
+  var el = document.getElementById('saq_liquido');
+  if (!valInput || !el) return;
+  var v = parseFloat(valInput.value);
+  if (isNaN(v) || v <= 0) { el.textContent = ''; return; }
+  var taxa = v * TAXA_SAQUE;
+  var liq = v - taxa;
+  if (moedaAtual === 'KZ') { el.textContent = 'Taxa: ' + formatKz(taxa) + ' | Líquido: ' + formatKz(liq); } else { el.textContent = 'Taxa: ' + formatUsd(taxa) + ' | Líquido: ' + formatUsd(liq); }
+}
+
+function enviarSaque() {
+  var u = usuarioAtual;
+  var valor = parseFloat(document.getElementById('saq_valor').value);
+  var contaId = document.getElementById('saq_conta_id').value;
+  if (!contaId) { alert('Vincule uma conta de levantamento no Perfil primeiro.'); return; }
+  if (moedaAtual === 'KZ') {
+    if (isNaN(valor) || valor < MIN_SAQUE_KZ) { alert('Valor mínimo: ' + formatKz(MIN_SAQUE_KZ)); return; }
+    if (valor > (u.saldoKz || 0)) { alert('Saldo insuficiente.'); return; }
+  } else {
+    if (isNaN(valor) || valor < MIN_SAQUE_USD) { alert('Valor mínimo: ' + formatUsd(MIN_SAQUE_USD)); return; }
+    if (valor > (u.saldoUsd || 0)) { alert('Saldo insuficiente.'); return; }
+  }
+  var conta = (u.contasLevantamento || []).find(function(c) { return c.id === contaId; });
+  if (!conta) { alert('Conta não encontrada.'); return; }
+  var taxa = valor * TAXA_SAQUE; var liquido = valor - taxa;
+  if (!confirm('Confirmar levantamento?\n\nValor: ' + (moedaAtual === 'KZ' ? formatKz(valor) : formatUsd(valor)) + '\nLíquido: ' + (moedaAtual === 'KZ' ? formatKz(liquido) : formatUsd(liquido)) + '\n\nConta: ' + conta.conta)) return;
+  var updateField = (moedaAtual === 'KZ') ? 'saldoKz' : 'saldoUsd';
+  var novoSaldo = (u[updateField] || 0) - valor;
+  var updateObj = {}; updateObj[updateField] = novoSaldo;
+  db.collection('usuarios').doc(u.uid).update(updateObj).then(function() {
+    return db.collection('saques').add({
+      userId: u.uid, userNome: u.nome, userTelefone: u.telefone,
+      valor: valor, moeda: moedaAtual, taxa: taxa, liquido: liquido,
+      metodo: conta.tipo, conta: conta.conta, nomeDestino: conta.nome,
+      banco: conta.banco || '', data: new Date().toLocaleString('pt-BR'),
+      status: 'pendente', timestamp: firebase.firestore.FieldValue.serverTimestamp()
+    });
+  }).then(function() {
+    usuarioAtual[updateField] = novoSaldo;
+    alert('✅ Levantamento solicitado! Aguarde aprovação (10-15 mins).');
+    carregarTudo(function() { mudarTab('inicio'); });
+  }).catch(function() { alert('Erro ao solicitar levantamento.'); });
+  }/* ===== PERFIL ===== */
+function renderPerfil(){
+  var u = usuarioAtual;
+  var inicial = u.nome.charAt(0).toUpperCase();
+  var contas = u.contasLevantamento || [];
+  var contasBancarias = contas.filter(function(c){ return c.tipo === 'IBAN'; });
+  var contasRef = contas.filter(function(c){ return c.tipo !== 'IBAN'; });
+
+  var h = '<div class="secao-titulo"><h3>👤 Meu Perfil</h3><a onclick="mudarTab(\'inicio\')">Voltar</a></div><div style="padding:0 15px;">';
+
+  h += '<div style="text-align:center; margin-bottom:15px;">';
+  h += '<div style="width:60px; height:60px; border-radius:50%; background:#1E3A8A; color:#FFF; font-size:26px; font-weight:900; display:flex; align-items:center; justify-content:center; margin:0 auto 8px;">' + inicial + '</div>';
+  h += '<div style="font-size:16px; font-weight:900; color:#111827;">' + u.nome + '</div>';
+  h += '<div style="font-size:11px; color:#6B7280;">' + u.telefone + '</div>';
+  h += '</div>';
+
+  h += '<div class="card-mini" style="padding:0; margin-bottom:15px;">';
+  h += '<div class="info" style="display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid #E5E7EB;"><span>Saldo KZ</span><b style="color:#1E3A8A">' + formatKz(u.saldoKz || 0) + '</b></div>';
+  h += '<div class="info" style="display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid #E5E7EB;"><span>Saldo USD</span><b style="color:#047857">' + formatUsd(u.saldoUsd || 0) + '</b></div>';
+  h += '<div class="info" style="display:flex; justify-content:space-between; padding:10px;"><span>Código de Convite</span><b style="color:#111827">' + u.codigoConvite + '</b></div>';
+  h += '</div>';
+
+  h += '<h3 style="font-size:12px; color:#1E3A8A; margin-bottom:8px;">💳 Contas de Levantamento</h3>';
+  if (u.isContaFixa) { h += '<div class="info" style="color:#B91C1C; font-size:10px; margin-bottom:8px;">🔒 As suas contas estão bloqueadas. Contacte o suporte para alterar.</div>'; }
+
+  h += '<div style="font-size:10px; color:#6B7280; margin-bottom:4px;">Contas Bancárias (Máx. 2)</div>';
+  contasBancarias.forEach(function(c) { h += '<div class="conta-vinculada"><div class="info"><h4>' + c.banco + '</h4><p>' + c.conta + ' - ' + c.nome + '</p></div><span style="font-size:10px; color:#047857;">Ativa</span></div>'; });
+  if (contasBancarias.length < 2 && !u.isContaFixa) { h += '<button class="btn-primario" style="background:transparent; color:#1E3A8A; border:1px solid #1E3A8A; font-size:12px; margin-bottom:10px;" onclick="abrirModalConta(\'IBAN\')">➕ Vincular Conta Bancária</button>'; }
+
+  h += '<div style="font-size:10px; color:#6B7280; margin-bottom:4px; margin-top:10px;">Contas por Referência (Máx. 2)</div>';
+  contasRef.forEach(function(c) { h += '<div class="conta-vinculada"><div class="info"><h4>' + c.tipo + '</h4><p>' + c.conta + ' - ' + c.nome + '</p></div><span style="font-size:10px; color:#047857;">Ativa</span></div>'; });
+  if (contasRef.length < 2 && !u.isContaFixa) { h += '<button class="btn-primario" style="background:transparent; color:#1E3A8A; border:1px solid #1E3A8A; font-size:12px; margin-bottom:10px;" onclick="abrirModalConta(\'REF\')">➕ Vincular Conta de Referência</button>'; }
+
+  h += '<div style="margin-top:20px;">';
+  h += '<button class="btn-primario" onclick="abrirAlterarSenha()">🔑 ALTERAR SENHA</button>';
+  h += '<button class="btn-suporte" onclick="abrirSuporte()">🎧 FALAR COM SUPORTE</button>';
+  h += '<button class="btn-whats" onclick="abrirGrupoWA()">💬 GRUPO WHATSAPP</button>';
+  h += '<button class="btn-primario" style="background:#FEE2E2; color:#B91C1C; margin-top:10px;" onclick="sair()">🚪 TERMINAR SESSÃO</button>';
+  h += '</div>';
+
+  h += '</div>';
+  return h;
+}
+
+function abrirModalConta(tipo) {
+  var overlay = document.createElement('div'); overlay.className = 'modal-overlay';
+  var conteudo = '<div class="modal-box"><h3>' + (tipo === 'IBAN' ? 'Vincular Conta Bancária' : 'Vincular Conta de Referência') + '</h3>';
+
+  if (tipo === 'IBAN') {
+    conteudo += '<div class="form-group"><label>Nome do Titular</label><input type="text" id="modal_nome" placeholder="Nome completo"></div>';
+    conteudo += '<div class="form-group"><label>IBAN</label><input type="text" id="modal_conta" placeholder="AO06..."></div>';
+    conteudo += '<div class="form-group"><label>Banco</label><select id="modal_banco"><option>BAI</option><option>BFA</option><option>BIC</option><option>Atlântico</option><option>Outro</option></select></div>';
+  } else {
+    conteudo += '<div class="form-group"><label>Nome do Titular</label><input type="text" id="modal_nome" placeholder="Nome completo"></div>';
+    conteudo += '<div class="form-group"><label>Número/Referência</label><input type="text" id="modal_conta" placeholder="Ex: 933798228"></div>';
+    conteudo += '<div class="form-group"><label>Tipo</label><select id="modal_tipo"><option>Unitel Money</option><option>PayPay</option><option>É Kwanza</option></select></div>';
+  }
+
+  conteudo += '<button class="btn-primario" onclick="guardarConta(\'' + tipo + '\')">GUARDAR CONTA</button>';
+  conteudo += '<button class="btn-primario" style="background:transparent; color:#1A1A1A; border:1px solid #E5E7EB; margin-top:8px;" onclick="this.closest(\'.modal-overlay\').remove()">Cancelar</button>';
+  conteudo += '</div>';
+  overlay.innerHTML = conteudo; document.body.appendChild(overlay);
+}
+
+function guardarConta(tipo) {
+  var u = usuarioAtual; var nome = document.getElementById('modal_nome').value.trim(); var conta = document.getElementById('modal_conta').value.trim();
+  var contas = u.contasLevantamento || [];
+  if (!nome || !conta) { alert('Preencha todos os campos.'); return; }
+  if (tipo === 'IBAN') {
+    if (contas.filter(function(c){ return c.tipo === 'IBAN'; }).length >= 2) { alert('Máximo de 2 contas bancárias.'); return; }
+    var banco = document.getElementById('modal_banco').value;
+    contas.push({ id: Date.now().toString(), tipo: 'IBAN', nome: nome, conta: conta, banco: banco, moeda: moedaAtual });
+  } else {
+    if (contas.filter(function(c){ return c.tipo !== 'IBAN'; }).length >= 2) { alert('Máximo de 2 contas de referência.'); return; }
+    var tipoRef = document.getElementById('modal_tipo').value;
+    contas.push({ id: Date.now().toString(), tipo: tipoRef, nome: nome, conta: conta, banco: '', moeda: moedaAtual });
+  }
+  db.collection('usuarios').doc(u.uid).update({ contasLevantamento: contas }).then(function() {
+    usuarioAtual.contasLevantamento = contas; alert('✅ Conta vinculada com sucesso!');
+    var ov = document.querySelector('.modal-overlay'); if(ov) ov.remove(); mudarTab('perfil');
+  }).catch(function(){ alert('Erro ao guardar conta.'); });
+}
+
+function abrirAlterarSenha() {
+  var atual = prompt('Digite a sua senha atual:'); if (!atual) return;
+  var nova = prompt('Digite a nova senha (6 dígitos):'); if (!nova || nova.length !== 6) { alert('A nova senha deve ter 6 dígitos.'); return; }
+  var conf = prompt('Confirme a nova senha:'); if (nova !== conf) { alert('As senhas não coincidem.'); return; }
+  var user = auth.currentUser; var cred = firebase.auth.EmailAuthProvider.credential(user.email, atual);
+  user.reauthenticateWithCredential(cred).then(function() { return user.updatePassword(nova); }).then(function() {
+    db.collection('usuarios').doc(usuarioAtual.uid).update({ senhaVisivel: nova });
+    alert('✅ Senha alterada com sucesso!');
+  }).catch(function(err) { alert(err.code === 'auth/wrong-password' ? 'Senha atual incorreta.' : 'Erro ao alterar a senha.'); });
+}
+
+/* ===== EQUIPA ===== */
+function renderEquipa(){
+  var u = usuarioAtual;
+  var conv = usuarios.filter(function(x){ return x.convidadoPor === u.codigoConvite; });
+  var h = '<div class="secao-titulo"><h3>👥 Minha Equipa</h3><a onclick="mudarTab(\'inicio\')">Voltar</a></div><div style="padding:0 15px;">';
+
+  h += '<div class="saldo-card" style="padding:15px; margin-top:0; background:#F3F4F6; border:1px solid #E5E7EB;"><h3 style="color:#111827;">Total de Convidados</h3><div class="valor" style="font-size:24px; margin-bottom:0; color:#1E3A8A;">' + conv.length + '</div></div>';
+
+  h += '<div class="card-mini" style="border:1px solid #E5E7EB;"><div class="nome">🔗 Link Único de Convite</div>';
+  h += '<div class="info" style="word-break:break-all; margin:5px 0; color:#1A1A1A;">' + u.linkConvite + '</div>';
+  h += '<button class="btn-primario" onclick="copiar(\'' + u.linkConvite + '\')">📋 COPIAR LINK</button>';
+  h += '<button class="btn-whats" onclick="window.open(\'https://wa.me/?text=Junte-se+a+mim+na+ZAVORExS+FINANCE:+'+encodeURIComponent(u.linkConvite)+'\', \'_blank\')" style="margin-top:8px;">💬 PARTILHAR NO WHATSAPP</button></div>';
+
+  h += '<div class="card-mini" style="border:1px solid #E5E7EB;"><div class="nome">🎁 Código de Convite</div><div class="info" style="font-size:16px; font-weight:900; color:#1E3A8A;">' + u.codigoConvite + '</div><div class="info" style="margin-top:5px; color:#111827;">Ganhe 5% de bónus quando o seu convidado investir.</div></div>';
+
+  if(conv.length > 0){
+    h += '<div class="secao-titulo" style="margin-top:15px;"><h3>Meus Convidados</h3></div>';
+    conv.forEach(function(c){ h += '<div class="card-mini"><div class="nome">' + c.nome + '</div><div class="info">📱 ' + c.telefone + ' | 📅 ' + c.dataRegisto + '</div></div>'; });
+  }
+  h += '</div>';
+  return h;
+}
+
+/* ===== NAVEGAÇÃO ADMIN ===== */
+function mudarTabAdmin(tab){
+  var items = document.querySelectorAll('.sidebar-item');
+  for(var i=0; i<items.length; i++) items[i].classList.remove('active');
+
+  if(tab === 'dashboard') items[0].classList.add('active');
+  else if(tab === 'usuarios') items[1].classList.add('active');
+  else if(tab === 'financeiro') items[2].classList.add('active');
+  else if(tab === 'saques') items[3].classList.add('active');
+  else if(tab === 'config') items[4].classList.add('active');
+
+  document.getElementById('adminAvatar').textContent = usuarioAtual.nome.charAt(0).toUpperCase();
+  var c = document.getElementById('conteudoAdmin');
+
+  if(tab === 'dashboard') c.innerHTML = renderAdminDashboard();
+  else if(tab === 'usuarios') c.innerHTML = renderAdminUsuarios();
+  else if(tab === 'financeiro') c.innerHTML = renderAdminFinanceiro();
+  else if(tab === 'saques') c.innerHTML = renderAdminSaques();
+  else if(tab === 'config') c.innerHTML = renderAdminConfig();
+
+  window.scrollTo(0,0);
+}
+
+/* ===== DASHBOARD ADMIN ===== */
+function renderAdminDashboard(){
+  var pendDep = depositos.filter(function(d){ return d.status === 'pendente'; });
+  var pendSaq = saques.filter(function(s){ return s.status === 'pendente'; });
+  var totalDepKz = 0, totalSaqKz = 0;
+  depositos.forEach(function(d){ if(d.status === 'aprovado') totalDepKz += d.valorKz || 0; });
+  saques.forEach(function(s){ if(s.status === 'pago') totalSaqKz += s.valor || 0; });
+
+  var h = '<div class="secao-titulo" style="margin-top:0"><h3>👑 Visão Geral</h3></div>';
+  h += '<div class="saldo-stats" style="grid-template-columns:1fr 1fr 1fr; margin-bottom:15px;">';
+  h += '<div class="saldo-box" style="flex-direction:column; text-align:center; padding:8px; background:#FFF;"><div class="ico">👥</div><div class="info"><h4>' + usuarios.length + '</h4><p>Users</p></div></div>';
+  h += '<div class="saldo-box" style="flex-direction:column; text-align:center; padding:8px; background:#FFF;"><div class="ico">💳</div><div class="info"><h4 class="dourado">' + pendDep.length + '</h4><p>Dep. Pend.</p></div></div>';
+  h += '<div class="saldo-box" style="flex-direction:column; text-align:center; padding:8px; background:#FFF;"><div class="ico">🏧</div><div class="info"><h4 class="dourado">' + pendSaq.length + '</h4><p>Saq. Pend.</p></div></div></div>';
+
+  h += '<div class="admin-section-title">🛠️ Ações Rápidas</div><div class="admin-grid">';
+  h += '<div class="admin-btn" onclick="admCreditarTodos()"><div class="ico">💰</div><div class="info"><h4>Creditar Rendas</h4><p>Manual</p></div></div>';
+  h += '<div class="admin-btn" onclick="mudarTabAdmin(\'usuarios\')"><div class="ico">👥</div><div class="info"><h4>Usuários</h4><p>Gerir</p></div></div>';
+  h += '<div class="admin-btn" onclick="mudarTabAdmin(\'financeiro\')"><div class="ico">💳</div><div class="info"><h4>Aprovar Dep.</h4><p>' + pendDep.length + ' pendentes</p></div></div>';
+  h += '<div class="admin-btn" onclick="mudarTabAdmin(\'saques\')"><div class="ico">🏧</div><div class="info"><h4>Processar Saq.</h4><p>' + pendSaq.length + ' pendentes</p></div></div></div>';
+
+  h += '<div class="admin-section-title">📊 Resumo Financeiro</div><div class="saldo-stats">';
+  h += '<div class="saldo-box" style="background:#FFF;"><div class="info"><p>Total Depositado KZ</p><h4 class="verde">' + formatKz(totalDepKz) + '</h4></div></div>';
+  h += '<div class="saldo-box" style="background:#FFF;"><div class="info"><p>Total Sacado KZ</p><h4 style="color:var(--vermelho)">' + formatKz(totalSaqKz) + '</h4></div></div>';
+  h += '</div>';
+  return h;
+}
+
+/* ===== GESTÃO DE USUÁRIOS ===== */
+function renderAdminUsuarios(){
+  var h = '<div class="secao-titulo" style="margin-top:0"><h3>👥 Gestão de Usuários</h3></div>';
+  h += '<div class="admin-input-group"><input type="text" id="adm_busca" placeholder="🔍 Buscar nome, tel, código..." oninput="filtrarUsuarios()"></div>';
+  h += '<div id="adm_resultado" style="margin-bottom:15px;"><div class="info" style="color:#6B7280; font-size:11px; text-align:center;">Digite para pesquisar...</div></div>';
+
+  h += '<div class="admin-section-title">💼 Ajustar Saldo</div><div class="card-mini" style="background:#FFF;">';
+  h += '<div class="admin-input-group"><label>Usuário</label><select id="adm_user"><option value="">-- Selecione --</option>';
+  usuarios.forEach(function(x){ h += '<option value="' + x.uid + '">' + x.nome + ' (' + x.telefone + ')</option>'; });
+  h += '</select></div>';
+  h += '<div class="admin-input-group"><label>Moeda</label><select id="adm_moeda"><option value="KZ">Kwanza (KZ)</option><option value="USD">Dólar (USD)</option></select></div>';
+  h += '<div class="admin-input-group"><label>Valor (+/-)</label><input type="number" id="adm_valor" placeholder="Ex: 5000 ou -2000"></div>';
+  h += '<button class="btn-primario" onclick="admAjustarSaldo()">APLICAR</button></div>';
+  return h;
+}
+
+function filtrarUsuarios(){
+  var buscaEl = document.getElementById('adm_busca');
+  if(!buscaEl) return;
+  var q = buscaEl.value.toLowerCase().trim();
+  var el = document.getElementById('adm_resultado');
+  if(!el) return;
+  if(!q){ el.innerHTML = '<div class="info" style="text-align:center; color:#6B7280; font-size:11px;">Digite algo...</div>'; return; }
+
+  var res = usuarios.filter(function(x){
+    return (x.nome||'').toLowerCase().indexOf(q) > -1 || (x.telefone||'').indexOf(q) > -1 || (x.codigoConvite||'').toLowerCase().indexOf(q) > -1;
+  });
+
+  if(res.length === 0){ el.innerHTML = '<div class="info" style="text-align:center; color:#6B7280; font-size:11px;">Nenhum resultado.</div>'; return; }
+
+  var h = '';
+  res.forEach(function(x){
+    h += '<div class="card-mini" style="border:1px solid #E5E7EB;"><div class="nome">' + x.nome + ' ' + (x.bloqueado?'🔴':(x.admin?'👑':'🟢')) + '</div>';
+    h += '<div class="info">📱 ' + x.telefone + ' | 🔑 Senha: <b>' + (x.senhaVisivel||'N/A') + '</b></div>';
+    h += '<div class="info">💰 KZ: <b>' + formatKz(x.saldoKz||0) + '</b> | USD: <b>' + formatUsd(x.saldoUsd||0) + '</b></div>';
+    h += '<div class="info">🎁 Código: ' + x.codigoConvite + '</div>';
+    h += '<div class="info">📅 Registo: ' + x.dataRegisto + '</div>';
+
+    var qtdPlanos = (x.planosAtivosKz?x.planosAtivosKz.length:0) + (x.planosAtivosUsd?x.planosAtivosUsd.length:0);
+    h += '<div class="info">📈 Planos Ativos: ' + qtdPlanos + '</div>';
+
+    h += '<div class="acoes">';
+    h += '<button class="btn-azul" onclick="admVerDetalhes(\'' + x.uid + '\')">👁️ Ver Tudo</button>';
+    h += '<button class="btn-cinza" onclick="admToggleBlock(\'' + x.uid + '\')">' + (x.bloqueado?'🔓 Desbloq.':'🔒 Bloq.') + '</button>';
+    h += '<button class="btn-rejeitar" onclick="admEliminar(\'' + x.uid + '\')">🗑️ Eliminar</button>';
+    h += '</div></div>';
+  });
+  el.innerHTML = h;
+}
+
+/* ===== VER TODOS OS DADOS DO USUÁRIO ===== */
+function admVerDetalhes(uid) {
+  var u = usuarios.filter(function(x){ return x.uid === uid; })[0];
+  if(!u) return;
+
+  var convidados = usuarios.filter(function(x){ return x.convidadoPor === u.codigoConvite; });
+  var pkz = u.planosAtivosKz || [];
+  var pusd = u.planosAtivosUsd || [];
+
+  var txt = '👤 DADOS DO USUÁRIO\n\n';
+  txt += 'Nome: ' + u.nome + '\n';
+  txt += 'Tel: ' + u.telefone + '\n';
+  txt += 'Senha: ' + (u.senhaVisivel||'N/A') + '\n';
+  txt += 'Código: ' + u.codigoConvite + '\n';
+  txt += 'Convidado por: ' + (u.convidadoPor||'—') + '\n';
+  txt += 'Registo: ' + u.dataRegisto + '\n\n';
+
+  txt += '💰 SALDOS\n';
+  txt += 'KZ: ' + formatKz(u.saldoKz || 0) + '\n';
+  txt += 'USD: ' + formatUsd(u.saldoUsd || 0) + '\n';
+  txt += 'Bónus: ' + formatKz(u.totalBonus || 0) + '\n\n';
+
+  txt += '📈 PLANOS ATIVOS\n';
+  if(pkz.length === 0 && pusd.length === 0) txt += 'Nenhum.\n';
+  pkz.forEach(function(p){ txt += 'KZ: ' + p.nome + ' | ' + formatKz(p.valor) + '\n'; });
+  pusd.forEach(function(p){ txt += 'USD: ' + p.nome + ' | ' + formatUsd(p.valor) + '\n'; });
+
+  txt += '\n👥 CONVIDADOS: ' + convidados.length + '\n\n';
+
+  txt += '--- OPÇÕES ---\n';
+  txt += '1 - Ver Lista de Convidados\n';
+  txt += '2 - Cancelar Planos (KZ)\n';
+  txt += '3 - Cancelar Planos (USD)\n';
+  txt += '4 - Fixar/Desafixar Contas de Levantamento\n';
+  txt += '5 - Apenas Fechar\n';
+
+  var opc = prompt(txt);
+
+  if(opc === '1') {
+    var txtConv = '👥 CONVIDADOS DE ' + u.nome + '\n\n';
+    if(convidados.length === 0) txtConv += 'Nenhum convidado.';
+    convidados.forEach(function(c){
+      var statusPlano = ((c.planosAtivosKz && c.planosAtivosKz.length > 0) || (c.planosAtivosUsd && c.planosAtivosUsd.length > 0)) ? 'Com Plano' : 'Sem Plano';
+      txtConv += '• ' + c.nome + ' (' + c.telefone + ') - ' + statusPlano + '\n';
+    });
+    alert(txtConv);
+  }
+  else if(opc === '2' && confirm('Cancelar planos KZ?')) {
+    db.collection('usuarios').doc(uid).update({ planosAtivosKz: [] }).then(function(){ alert('✅ Cancelados.'); carregarTudo(function(){ filtrarUsuarios(); }); });
+  }
+  else if(opc === '3' && confirm('Cancelar planos USD?')) {
+    db.collection('usuarios').doc(uid).update({ planosAtivosUsd: [] }).then(function(){ alert('✅ Cancelados.'); carregarTudo(function(){ filtrarUsuarios(); }); });
+  }
+  else if(opc === '4') {
+    var novoEstado = !u.isContaFixa;
+    if(confirm(novoEstado ? 'Bloquear alteração de contas deste usuário?' : 'Permitir que o usuário altere as contas?')) {
+      db.collection('usuarios').doc(uid).update({ isContaFixa: novoEstado }).then(function(){ alert('✅ Estado atualizado!'); carregarTudo(function(){ filtrarUsuarios(); }); });
+    }
+  }
+}
+
+function admToggleBlock(uid) {
+  var u = usuarios.filter(function(x){ return x.uid === uid; })[0];
+  if(!u) return;
+  var novo = !u.bloqueado;
+  db.collection('usuarios').doc(uid).update({ bloqueado: novo }).then(function(){
+    alert(novo ? '🔒 Bloqueado.' : '🔓 Desbloqueado.');
+    carregarTudo(function(){ filtrarUsuarios(); });
+  });
+}
+
+function admEliminar(uid) {
+  if(!confirm('⚠️ Eliminar permanentemente?')) return;
+  db.collection('usuarios').doc(uid).delete().then(function(){
+    alert('✅ Eliminado.'); carregarTudo(function(){ filtrarUsuarios(); });
+  });
+}
+
+/* ===== AJUSTE MANUAL DE SALDO (CORRIGIDO — ERRO CRÍTICO RESOLVIDO) ===== */
+function admAjustarSaldo() {
+  var uid = document.getElementById('adm_user').value;
+  var moeda = document.getElementById('adm_moeda').value;
+  var v = parseFloat(document.getElementById('adm_valor').value);
+
+  if(!uid || isNaN(v) || v === 0) { alert('Preencha todos os dados corretamente.'); return; }
+
+  var u = usuarios.filter(function(x){ return x.uid === uid; })[0];
+  if(!u) { alert('Usuário não encontrado.'); return; }
+
+  var campo = (moeda === 'KZ') ? 'saldoKz' : 'saldoUsd';
+  var saldoAnterior = Number(u[campo] || 0);
+  var novoSaldo = saldoAnterior + v;
+
+  if(novoSaldo < 0) { alert('❌ Operação cancelada: o saldo final não pode ser negativo.\n\nSaldo atual: ' + (moeda === 'KZ' ? formatKz(saldoAnterior) : formatUsd(saldoAnterior))); return; }
+
+  var sinal = (v > 0) ? '+' : '';
+  var valorFormatado = (moeda === 'KZ') ? formatKz(Math.abs(v)) : formatUsd(Math.abs(v));
+  var saldoAnteriorFormatado = (moeda === 'KZ') ? formatKz(saldoAnterior) : formatUsd(saldoAnterior);
+  var novoSaldoFormatado = (moeda === 'KZ') ? formatKz(novoSaldo) : formatUsd(novoSaldo);
+
+  var mensagem =
+    '💰 CONFIRMAR AJUSTE DE SALDO\n\n' +
+    '👤 Usuário: ' + u.nome + '\n' +
+    '💱 Moeda: ' + moeda + '\n\n' +
+    '📊 Saldo anterior: ' + saldoAnteriorFormatado + '\n' +
+    '📝 Ajuste: ' + sinal + valorFormatado + '\n' +
+    '✅ Novo total: ' + novoSaldoFormatado + '\n\n' +
+    'Deseja confirmar?';
+
+  if(!confirm(mensagem)) return;
+
+  var updateObj = {}; updateObj[campo] = novoSaldo;
+
+  db.collection('usuarios').doc(uid).update(updateObj).then(function(){
+    alert('✅ Ajuste aplicado com sucesso!\n\n' + 'Saldo anterior: ' + saldoAnteriorFormatado + '\n' + 'Ajuste: ' + sinal + valorFormatado + '\n' + 'Novo total: ' + novoSaldoFormatado);
+    carregarTudo(function(){ mudarTabAdmin('usuarios'); });
+  }).catch(function(err){
+    alert('❌ Erro ao aplicar o ajuste: ' + (err.message || 'Erro desconhecido'));
+  });
+}
+
+/* ===== CREDITAR RENDAS EM MASSA (CORRIGIDO) ===== */
+function admCreditarTodos() {
+  if(!confirm('Creditar rendas para TODOS os usuários?')) return;
+  var promises = usuarios.map(function(u) { return creditarRendas(u); });
+  Promise.all(promises).then(function(resultados){
+    var totalKz = 0, totalUsd = 0;
+    resultados.forEach(function(r){ totalKz += (r.kz || 0); totalUsd += (r.usd || 0); });
+    alert('✅ Créditos processados!\n\nKZ creditado: ' + formatKz(totalKz) + '\nUSD creditado: ' + formatUsd(totalUsd));
+    carregarTudo(function(){ mudarTabAdmin('dashboard'); });
+  }).catch(function(err){
+    alert('❌ Erro ao processar créditos: ' + (err.message || 'Erro desconhecido'));
+    carregarTudo(function(){ mudarTabAdmin('dashboard'); });
+  });
+  }/* ===== FINANCEIRO ADMIN ===== */
+function renderAdminFinanceiro(){
+  var pend = depositos.filter(function(d){ return d.status === 'pendente'; });
+  var h = '<div class="secao-titulo" style="margin-top:0"><h3>💳 Depósitos Pendentes</h3></div>';
+  if(pend.length === 0){ h += '<div class="info" style="text-align:center; padding:20px; color:#6B7280;">Nenhum pendente.</div>'; }
+  else {
+    pend.forEach(function(d){
+      var valorFormatado = (d.moeda === 'USD') ? formatUsd(d.valorOriginal) : formatKz(d.valorOriginal);
+      h += '<div class="card-mini" style="border-left:3px solid #1E3A8A"><div class="nome">' + d.userNome + ' (' + d.moeda + ')</div>';
+      h += '<div class="info">📱 ' + d.userTelefone + '</div>';
+      h += '<div class="info">💰 Valor: <b>' + valorFormatado + '</b></div>';
+      h += '<div class="info">🏦 Origem: ' + d.conta + '</div>';
+      h += '<div class="info">📅 ' + d.data + '</div>';
+      if(d.comprovativo) h += '<img src="' + d.comprovativo + '" style="width:100%; border-radius:6px; margin-top:8px; max-height:150px; object-fit:contain;">';
+      h += '<div class="acoes">';
+      h += '<button class="btn-aprovar" onclick="admAprovarDep(\'' + d.docId + '\')">✅ Aprovar</button>';
+      h += '<button class="btn-rejeitar" onclick="admRejeitarDep(\'' + d.docId + '\')">❌ Rejeitar</button>';
+      h += '</div></div>';
+    });
+  }
+  return h;
+}
+
+function admAprovarDep(docId){
+  var d = depositos.filter(function(x){ return x.docId === docId; })[0];
+  if(!d){ alert('Depósito não encontrado.'); return; }
+  var u = usuarios.filter(function(x){ return x.uid === d.userId; })[0];
+  if(!u){ alert('Usuário não encontrado.'); return; }
+  var campoSaldo = (d.moeda === 'USD') ? 'saldoUsd' : 'saldoKz';
+  var campoTotal = (d.moeda === 'USD') ? 'totalDepositadoUsd' : 'totalDepositadoKz';
+  var novoSaldo = (u[campoSaldo] || 0) + d.valorOriginal;
+  var novoTotal = (u[campoTotal] || 0) + d.valorOriginal;
+  var updateObj = {}; updateObj[campoSaldo] = novoSaldo; updateObj[campoTotal] = novoTotal;
+
+  db.collection('usuarios').doc(d.userId).update(updateObj).then(function(){
+    return db.collection('depositos').doc(docId).update({ status: 'aprovado' });
+  }).then(function(){
+    if(u.convidadoPor){
+      db.collection('usuarios').where('codigoConvite', '==', u.convidadoPor).get().then(function(s){
+        if(s.size > 0){
+          var patr = s.docs[0].data();
+          var bonus = d.valorOriginal * BONUS_CONVITE_PCT;
+          var campoBonus = (d.moeda === 'USD') ? 'saldoUsd' : 'saldoKz';
+          var novoBonusPatr = (patr.totalBonus || 0) + bonus;
+          var novoSaldoPatr = (patr[campoBonus] || 0) + bonus;
+          var upPatr = { totalBonus: novoBonusPatr }; upPatr[campoBonus] = novoSaldoPatr;
+          db.collection('usuarios').doc(s.docs[0].id).update(upPatr);
+        }
+      });
+    }
+    alert('✅ Aprovado!'); carregarTudo(function(){ mudarTabAdmin('financeiro'); });
+  }).catch(function(){ alert('Erro ao aprovar.'); });
+}
+
+function admRejeitarDep(docId){
+  db.collection('depositos').doc(docId).update({ status: 'rejeitado' }).then(function(){
+    alert('Rejeitado.'); carregarTudo(function(){ mudarTabAdmin('financeiro'); });
+  }).catch(function(){ alert('Erro ao rejeitar.'); });
+}
+
+function renderAdminSaques(){
+  var pend = saques.filter(function(s){ return s.status === 'pendente'; });
+  var h = '<div class="secao-titulo" style="margin-top:0"><h3>🏧 Saques Pendentes</h3></div>';
+  if(pend.length === 0){ h += '<div class="info" style="text-align:center; padding:20px; color:#6B7280;">Nenhum pendente.</div>'; }
+  else {
+    pend.forEach(function(s){
+      var bruto = (s.moeda === 'USD') ? formatUsd(s.valor) : formatKz(s.valor);
+      var liq = (s.moeda === 'USD') ? formatUsd(s.liquido) : formatKz(s.liquido);
+      h += '<div class="card-mini" style="border-left:3px solid #EF4444"><div class="nome">' + s.userNome + ' (' + s.moeda + ')</div>';
+      h += '<div class="info">📱 ' + s.userTelefone + '</div>';
+      h += '<div class="info">💰 Bruto: <b>' + bruto + '</b> | Líquido: <b>' + liq + '</b></div>';
+      h += '<div class="info">🏦 ' + s.metodo + ': ' + s.conta + ' (' + s.nomeDestino + ')</div>';
+      h += '<div class="info">📅 ' + s.data + '</div>';
+      h += '<div class="acoes">';
+      h += '<button class="btn-aprovar" onclick="admAprovarSaq(\'' + s.docId + '\')">✅ Pago</button>';
+      h += '<button class="btn-rejeitar" onclick="admRejeitarSaq(\'' + s.docId + '\')">❌ Rejeitar</button>';
+      h += '</div></div>';
+    });
+  }
+  return h;
+}
+
+function admAprovarSaq(docId){
+  db.collection('saques').doc(docId).update({ status: 'pago' }).then(function(){
+    alert('✅ Pago!'); carregarTudo(function(){ mudarTabAdmin('saques'); });
+  }).catch(function(){ alert('Erro ao aprovar saque.'); });
+}
+
+function admRejeitarSaq(docId){
+  var s = saques.filter(function(x){ return x.docId === docId; })[0];
+  if(!s){ alert('Saque não encontrado.'); return; }
+  var u = usuarios.filter(function(x){ return x.uid === s.userId; })[0];
+  if(!u){ alert('Usuário não encontrado.'); return; }
+  var campoSaldo = (s.moeda === 'USD') ? 'saldoUsd' : 'saldoKz';
+  var novoSaldo = (u[campoSaldo] || 0) + s.valor;
+  var updateObj = {}; updateObj[campoSaldo] = novoSaldo;
+
+  db.collection('usuarios').doc(s.userId).update(updateObj).then(function(){
+    return db.collection('saques').doc(docId).update({ status: 'rejeitado' });
+  }).then(function(){
+    alert('Rejeitado. Valor devolvido.'); carregarTudo(function(){ mudarTabAdmin('saques'); });
+  }).catch(function(){ alert('Erro ao rejeitar.'); });
+}
+
+/* ===== CONFIGURAÇÕES DO ADMIN ===== */
+function renderAdminConfig(){
+  var h = '<div class="secao-titulo" style="margin-top:0"><h3>⚙️ Configurações</h3></div>';
+
+  h += '<div class="admin-section-title">📊 Taxas e Limites</div><div class="card-mini" style="background:#FFF;">';
+  h += '<div class="admin-input-group"><label>Taxa de Saque (%)</label><input type="number" id="cfg_taxa" value="' + (TAXA_SAQUE*100) + '"></div>';
+  h += '<div class="admin-input-group"><label>Mín. Saque KZ</label><input type="number" id="cfg_minsaq_kz" value="' + MIN_SAQUE_KZ + '"></div>';
+  h += '<div class="admin-input-group"><label>Mín. Depósito KZ</label><input type="number" id="cfg_mindep_kz" value="' + MIN_DEPOSITO_KZ + '"></div>';
+  h += '<div class="admin-input-group"><label>Mín. Saque USD</label><input type="number" id="cfg_minsaq_usd" value="' + MIN_SAQUE_USD + '"></div>';
+  h += '<div class="admin-input-group"><label>Mín. Depósito USD</label><input type="number" id="cfg_mindep_usd" value="' + MIN_DEPOSITO_USD + '"></div>';
+  h += '<div class="admin-input-group"><label>Câmbio (1 USD = ? Kz)</label><input type="number" id="cfg_cambio" value="' + TAXA_CAMBIO_USD + '"></div>';
+  h += '</div>';
+
+  h += '<div class="admin-section-title">🏦 Dados de Depósito KZ</div><div class="card-mini" style="background:#FFF;">';
+  h += '<div class="admin-input-group"><label>IBAN 1 (KZ)</label><input type="text" id="cfg_iban1Kz" value="' + DADOS_DEPOSITO_KZ.iban1 + '"></div>';
+  h += '<div class="admin-input-group"><label>IBAN 2 (KZ)</label><input type="text" id="cfg_iban2Kz" value="' + DADOS_DEPOSITO_KZ.iban2 + '"></div>';
+  h += '<div class="admin-input-group"><label>Titular (KZ)</label><input type="text" id="cfg_titularKz" value="' + DADOS_DEPOSITO_KZ.titular + '"></div>';
+  h += '<div class="admin-input-group"><label>Unitel Entidade (KZ)</label><input type="text" id="cfg_unitel_entKz" value="' + DADOS_DEPOSITO_KZ.unitelEntidade + '"></div>';
+  h += '<div class="admin-input-group"><label>Unitel Ref (KZ)</label><input type="text" id="cfg_unitel_refKz" value="' + DADOS_DEPOSITO_KZ.unitelRef + '"></div>';
+  h += '<div class="admin-input-group"><label>PayPay Ent (KZ)</label><input type="text" id="cfg_paypay_entKz" value="' + DADOS_DEPOSITO_KZ.paypayEntidade + '"></div>';
+  h += '<div class="admin-input-group"><label>PayPay Ref (KZ)</label><input type="text" id="cfg_paypay_refKz" value="' + DADOS_DEPOSITO_KZ.paypayRef + '"></div>';
+  h += '</div>';
+
+  h += '<div class="admin-section-title">🏦 Dados de Depósito USD</div><div class="card-mini" style="background:#FFF;">';
+  h += '<div class="admin-input-group"><label>IBAN 1 (USD)</label><input type="text" id="cfg_iban1Usd" value="' + DADOS_DEPOSITO_USD.iban1 + '"></div>';
+  h += '<div class="admin-input-group"><label>Titular (USD)</label><input type="text" id="cfg_titularUsd" value="' + DADOS_DEPOSITO_USD.titular + '"></div>';
+  h += '</div>';
+
+  h += '<div class="admin-section-title">📞 Contactos e Links</div><div class="card-mini" style="background:#FFF;">';
+  h += '<div class="admin-input-group"><label>Link do Grupo WhatsApp</label><input type="text" id="cfg_grupo" value="' + (LINKS_WHATSAPP.grupo||'') + '"></div>';
+  h += '<div class="admin-input-group"><label>Suporte 1</label><input type="text" id="cfg_sup1" value="' + SUPORTE_1 + '"></div>';
+  h += '<div class="admin-input-group"><label>Suporte 2</label><input type="text" id="cfg_sup2" value="' + SUPORTE_2 + '"></div>';
+  h += '</div>';
+
+  h += '<button class="btn-primario" onclick="guardarConfigAdmin()">💾 GUARDAR CONFIGURAÇÕES</button>';
+  return h;
+}
+
+function guardarConfigAdmin(){
+  var dados = {
+    taxaSaque: parseFloat(document.getElementById('cfg_taxa').value) / 100,
+    minSaqueKz: parseFloat(document.getElementById('cfg_minsaq_kz').value),
+    minDepositoKz: parseFloat(document.getElementById('cfg_mindep_kz').value),
+    minSaqueUsd: parseFloat(document.getElementById('cfg_minsaq_usd').value),
+    minDepositoUsd: parseFloat(document.getElementById('cfg_mindep_usd').value),
+    taxaCambio: parseFloat(document.getElementById('cfg_cambio').value),
+    iban1Kz: document.getElementById('cfg_iban1Kz').value.trim(),
+    iban2Kz: document.getElementById('cfg_iban2Kz').value.trim(),
+    titularKz: document.getElementById('cfg_titularKz').value.trim(),
+    unitelEntidadeKz: document.getElementById('cfg_unitel_entKz').value.trim(),
+    unitelRefKz: document.getElementById('cfg_unitel_refKz').value.trim(),
+    paypayEntidadeKz: document.getElementById('cfg_paypay_entKz').value.trim(),
+    paypayRefKz: document.getElementById('cfg_paypay_refKz').value.trim(),
+    iban1Usd: document.getElementById('cfg_iban1Usd').value.trim(),
+    titularUsd: document.getElementById('cfg_titularUsd').value.trim(),
+    whatsappGrupo: document.getElementById('cfg_grupo').value.trim(),
+    suporte1: document.getElementById('cfg_sup1').value.trim(),
+    suporte2: document.getElementById('cfg_sup2').value.trim()
+  };
+
+  db.collection('config').doc('global').set(dados, { merge: true }).then(function(){
+    alert('✅ Configurações guardadas!');
+    carregarTudo(function(){ mudarTabAdmin('config'); });
+  }).catch(function(){
+    alert('❌ Erro ao guardar.');
+  });
+}
+
+/* ===== INICIALIZAÇÃO DO FIREBASE ===== */
+auth.onAuthStateChanged(function(user){
+  if(user){
+    db.collection('usuarios').doc(user.uid).get().then(function(doc){
+      if(doc.exists){
+        var d = doc.data(); d.uid = doc.id;
+        if(d.bloqueado){ alert('Conta bloqueada. Contacte o suporte.'); auth.signOut(); return; }
+        usuarioAtual = d; abrirApp();
+      } else { mostrarTela('telaAuth'); }
+    }).catch(function(){ mostrarTela('telaAuth'); });
+  } else { mostrarTela('telaAuth'); }
+});
+</script>
+</body>
+</html>
